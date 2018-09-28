@@ -1,7 +1,11 @@
 <ion-menu [content]="content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Menu</ion-title>
+      <ion-row>
+        <ion-col align-self-center> <img class="circle-pic"  [src]="userPhoto"></ion-col>
+        <ion-col  align-self-center><ion-title>{{username}}</ion-title></ion-col>
+        <ion-col width-5></ion-col>
+      </ion-row>
     </ion-toolbar>
   </ion-header>
 

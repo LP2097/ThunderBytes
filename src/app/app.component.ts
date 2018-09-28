@@ -2,9 +2,11 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Storage } from "@ionic/storage";
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import {LoginPage} from "../pages/login/login";
 
 @Component({
   templateUrl: 'app.html'
@@ -12,12 +14,24 @@ import { ListPage } from '../pages/list/list';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = LoginPage;
+
+  username;
+  userPhoto;
+
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private storage: Storage) {
     this.initializeApp();
+
+
+    storage.get('username').then((val) => {
+      this.username = val;
+    });
+    storage.get('userPhoto').then((val) => {
+      this.userPhoto = val;
+    });
 
     // used for an example of ngFor and navigation
     this.pages = [
