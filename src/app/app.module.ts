@@ -1,22 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 
-import {IonicStorageModule, Storage} from '@ionic/storage'
+import {IonicStorageModule} from '@ionic/storage'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { AuthProvider } from '../providers/auth/auth';
 import { GooglePlus } from '@ionic-native/google-plus';
 import {AngularFireModule} from "@angular/fire";
-import {GoogleLoginComponent} from "../components/google-login/google-login";
 import {AngularFireAuthModule} from "@angular/fire/auth";
+import { CacheModule } from "ionic-cache";
 import {LoginPage} from "../pages/login/login";
+import { Provider } from '../providers/provider/provider';
+import {HttpModule} from "@angular/http";
+import { HttpClientModule} from "@angular/common/http";
+
 
 
 var config = {
@@ -33,15 +36,20 @@ var config = {
     MyApp,
     HomePage,
     ListPage,
-    LoginPage,
-    GoogleLoginComponent
+    LoginPage
+
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(config),
     IonicStorageModule.forRoot(),
-    AngularFireAuthModule
+    CacheModule.forRoot(),
+    AngularFireAuthModule,
+    HttpModule,
+    HttpClientModule
+
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -49,13 +57,16 @@ var config = {
     HomePage,
     ListPage,
     LoginPage
+
+
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider,
-    GooglePlus
+    GooglePlus,
+    Provider,
+
 
   ]
 })
