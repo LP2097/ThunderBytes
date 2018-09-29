@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "890055678350",
+    "firebase_url": "https://thunderbytes-28c25.firebaseio.com",
+    "project_id": "thunderbytes-28c25",
+    "storage_bucket": "thunderbytes-28c25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890055678350:android:bc3c59da38801fb3",
+        "android_client_info": {
+          "package_name": "com.ThunderBytes.Braford1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890055678350-fn4bn7oi5mfckmfj9er8vjs0d4s7blis.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ThunderBytes.Braford1",
+            "certificate_hash": "a75effba21f813fa76598e4d7a8d9962f0472014"
+          }
+        },
+        {
+          "client_id": "890055678350-r6u12dqibd51uugojugojuflb42q8qvh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrWWV_DgkqWcdRkS-H7Uee2t49BMfKh4Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890055678350-r6u12dqibd51uugojugojuflb42q8qvh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "890055678350-nho29ukdg1af4og2ju8gjmd2v7ahb28g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ThunderBytes.Braford1"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

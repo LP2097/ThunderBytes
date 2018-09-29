@@ -7,12 +7,25 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-4 ></ion-col>
+      <ion-col col-8 align-self-center>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+          <img class="circle-pic"  [src]="photo">
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+      </ion-col>
+      <ion-col col-2></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4></ion-col>
+      <ion-col col-8 align-self-center>
+        <div *ngIf="user">
+          {{user}}
+        </div>
+      </ion-col>
+      <ion-col col-2></ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
