@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {GooglePlus} from "@ionic-native/google-plus";
-import {NavController} from "ionic-angular";
-import {HomePage} from "../../pages/home/home";
+
 
 /*
   Generated class for the Provider provider.
@@ -17,6 +16,7 @@ export class Provider {
     console.log('Hello Provider Provider');
   }
 
+  user;
   displayName=null;
   email=null;
   familyName=null;
@@ -29,6 +29,7 @@ export class Provider {
     await this.googlePlus.login({})
       .then(res => {
         console.log('dopo'+res);
+        this.user=res;
         this.displayName = res.displayName;
         this.email = res.email;
         this.familyName = res.familyName;
@@ -41,6 +42,7 @@ export class Provider {
       })
       .catch(err => console.error(err));
   }
+
 
 
   logout() {
@@ -58,4 +60,6 @@ export class Provider {
       })
       .catch(err => console.error(err));
   }
+
+
 }
