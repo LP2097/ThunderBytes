@@ -10,6 +10,7 @@ import {LoginPage} from "../pages/login/login";
 import {CacheService} from "ionic-cache";
 import { GooglePlus } from '@ionic-native/google-plus';
 import {Provider} from "../providers/provider/provider";
+import {SettingsPage} from "../pages/settings/settings";
 
 
 
@@ -21,7 +22,6 @@ export class MyApp {
 
   rootPage: any = LoginPage;
 
-  user;
 
   pages: Array<{title: string, component: any}>;
 
@@ -31,12 +31,12 @@ export class MyApp {
               private provider: Provider,
               ) {
     this.initializeApp();
-    this.user=provider.displayName;
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'List', component: ListPage },
+      { title: 'Settings', component: SettingsPage}
     ];
 
   }
@@ -45,6 +45,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });

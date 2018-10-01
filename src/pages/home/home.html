@@ -3,7 +3,9 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>Home<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+    </ion-title>
+
   </ion-navbar>
 </ion-header>
 
@@ -28,4 +30,18 @@
       <ion-col col-2></ion-col>
     </ion-row>
   </ion-grid>
+
+  <justgage [options]="options" [max]="max" [value]="value"></justgage>
+
+
+  <canvas baseChart width="300" height="400"
+          [datasets]="lineChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [colors]="lineChartColors"
+          [legend]="lineChartLegend"
+          [chartType]="lineChartType"
+          (chartHover)="chartHovered($event)"
+          (chartClick)="chartClicked($event)"></canvas>
+
 </ion-content>

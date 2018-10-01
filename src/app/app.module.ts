@@ -19,6 +19,9 @@ import {LoginPage} from "../pages/login/login";
 import { Provider } from '../providers/provider/provider';
 import {HttpModule} from "@angular/http";
 import { HttpClientModule} from "@angular/common/http";
+import {SettingsPage} from "../pages/settings/settings";
+import { JustgageModule } from 'angular2-justgage';
+import { ChartsModule } from 'ng2-charts';
 
 
 
@@ -36,7 +39,8 @@ var config = {
     MyApp,
     HomePage,
     ListPage,
-    LoginPage
+    LoginPage,
+    SettingsPage
 
   ],
   imports: [
@@ -47,7 +51,9 @@ var config = {
     CacheModule.forRoot(),
     AngularFireAuthModule,
     HttpModule,
-    HttpClientModule
+    HttpClientModule,
+    JustgageModule,
+    ChartsModule
 
 
   ],
@@ -56,7 +62,8 @@ var config = {
     MyApp,
     HomePage,
     ListPage,
-    LoginPage
+    LoginPage,
+    SettingsPage
 
 
   ],

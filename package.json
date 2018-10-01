@@ -27,7 +27,9 @@
     "@ionic-native/status-bar": "~4.12.0",
     "@ionic/pro": "2.0.3",
     "@ionic/storage": "^2.2.0",
+    "angular2-justgage": "^0.3.0",
     "angularfire2": "^5.0.2",
+    "chart.js": "^2.7.2",
     "cordova-android": "7.0.0",
     "cordova-ios": "4.5.5",
     "cordova-plugin-device": "^2.0.2",
@@ -42,6 +44,7 @@
     "ionic-angular": "3.9.2",
     "ionic-cache": "^3.1.3",
     "ionicons": "3.0.0",
+    "ng2-charts": "^1.6.0",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.26"
@@ -53,17 +56,16 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.890055678350-nho29ukdg1af4og2ju8gjmd2v7ahb28g",
-        "WEB_APPLICATION_CLIENT_ID": "890055678350-r6u12dqibd51uugojugojuflb42q8qvh.apps.googleusercontent.com"
-      },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-sqlite-storage": {}
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-googleplus": {
+        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.890055678350-nho29ukdg1af4og2ju8gjmd2v7ahb28g"
+      }
     },
     "platforms": [
       "ios",
