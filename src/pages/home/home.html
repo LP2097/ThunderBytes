@@ -44,4 +44,16 @@
           (chartHover)="chartHovered($event)"
           (chartClick)="chartClicked($event)"></canvas>
 
+
+   `
+  <mwl-gauge
+    [max]="100"
+    [dialStartAngle]="-90"
+    [dialEndAngle]="-90.001"
+    [value]="50"
+    [animated]="true"
+    [animationDuration]="2">
+  </mwl-gauge>
+
+
 </ion-content>

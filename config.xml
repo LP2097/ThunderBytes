@@ -89,6 +89,6 @@
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.890055678350-nho29ukdg1af4og2ju8gjmd2v7ahb28g" />
     </plugin>
     <engine name="ios" spec="4.5.5" />
-    <engine name="android" spec="7.0.0" />
     <allow-navigation href="http://192.168.1.106:8100" />
+    <engine name="android" spec="~7.0.0" />
 </widget>
