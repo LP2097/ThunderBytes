@@ -22,6 +22,11 @@ import { HttpClientModule} from "@angular/common/http";
 import {SettingsPage} from "../pages/settings/settings";
 import { JustgageModule } from 'angular2-justgage';
 import { ChartsModule } from 'ng2-charts';
+import {MachinePage} from "../pages/machine/machine";
+import {GaugeModule} from "angular-gauge";
+import {SinglemachinePage} from "../pages/singlemachine/singlemachine";
+
+
 
 
 
@@ -40,7 +45,10 @@ var config = {
     HomePage,
     ListPage,
     LoginPage,
-    SettingsPage
+    SettingsPage,
+    MachinePage,
+    SinglemachinePage
+
 
   ],
   imports: [
@@ -53,7 +61,11 @@ var config = {
     HttpModule,
     HttpClientModule,
     JustgageModule,
-    ChartsModule
+    ChartsModule,
+    GaugeModule.forRoot()
+
+
+
 
 
   ],
@@ -63,7 +75,9 @@ var config = {
     HomePage,
     ListPage,
     LoginPage,
-    SettingsPage
+    SettingsPage,
+    MachinePage,
+    SinglemachinePage
 
 
   ],

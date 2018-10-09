@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {GooglePlus} from "@ionic-native/google-plus";
+import {User} from "../../app/models/User";
+import {AngularFireAuth} from "@angular/fire/auth";
 
 
 /*
@@ -12,7 +14,7 @@ import {GooglePlus} from "@ionic-native/google-plus";
 @Injectable()
 export class Provider {
 
-  constructor(public http: HttpClient, private googlePlus: GooglePlus) {
+  constructor(public http: HttpClient, private googlePlus: GooglePlus, private afAuth: AngularFireAuth) {
     console.log('Hello Provider Provider');
   }
 
@@ -55,11 +57,24 @@ export class Provider {
         this.givenName = "";
         this.userId = "";
         this.imageUrl = "";
+        this.user="";
 
         this.isLoggedIn = false;
       })
       .catch(err => console.error(err));
   }
 
+
+  async loginWithEmailAndPassword(user: User) {
+    await this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)
+      .then(res => {
+        console.log('dopo'+res);
+        this.user=res;
+
+        this.isLoggedIn = true;
+
+      })
+      .catch(err => console.error(err));
+  }
 
 }

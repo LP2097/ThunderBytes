@@ -11,6 +11,7 @@ import {CacheService} from "ionic-cache";
 import { GooglePlus } from '@ionic-native/google-plus';
 import {Provider} from "../providers/provider/provider";
 import {SettingsPage} from "../pages/settings/settings";
+import {MachinePage} from "../pages/machine/machine";
 
 
 
@@ -36,6 +37,7 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: HomePage },
       { title: 'List', component: ListPage },
+      { title: 'Machine', component: MachinePage },
       { title: 'Settings', component: SettingsPage}
     ];
 
