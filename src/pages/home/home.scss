@@ -1,33 +1,68 @@
-page-home {
-
+@font-face {
+  font-family: Cocogoose;
+  src: url(../../assets/font/Cocogoose.ttf);
 }
 
-.circle-pic{
-  width:100px;
-  height:100px;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
+@font-face {
+  font-family: GeosansLight;
+  src: url(../../assets/font/GeosansLight-Oblique.ttf);
 }
 
-mwl-gauge {
-  width: 150px;
-  height: 150px;
-  display: block;
-  padding: 10px;
+@font-face {
+  font-family: Roboto;
+  src: url(../../assets/font/Roboto-Condensed.ttf);
 }
-mwl-gauge > .gauge > .dial {
-  stroke: #eee;
-  stroke-width: 2;
-  fill: rgba(0,0,0,0);
+
+@font-face {
+  font-family: primetime;
+  src: url(../../assets/font/PRIMETIME.ttf);
 }
-mwl-gauge > .gauge > .value {
-  stroke: rgb(47, 227, 255);
-  stroke-width: 2;
-  fill: rgba(0,0,0,0);
+
+.title{
+  font-family: primetime;
 }
-mwl-gauge > .gauge > .value-text {
-  fill: rgb(47, 227, 255);
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: 1em;
+
+/*.legend4{
+  background-color: #29384D;
+  height: 40px;
+  width: 100%;
+  margin-left: -10%;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-weight: 400;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  text-shadow: 1px 1px #06060d;
+}*/
+
+.widget {
+  margin: 0 auto;
+  width: 350px;
+  margin-top: 20px;
+  background-color: #ccc;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.4);
+}
+
+.chart-container {
+  padding: 25px;
+}
+
+.shadow {
+  -webkit-filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.5));
+}
+
+.legend4{
+  margin-top: 5%;
+  margin-left: 5%;
+}
+
+#textConsumationPlant{
+  text-align: center;
+  font-family: GeosansLight;
+  font-size: 19px;
 }

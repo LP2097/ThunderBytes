@@ -25,6 +25,7 @@ import { ChartsModule } from 'ng2-charts';
 import {MachinePage} from "../pages/machine/machine";
 import {GaugeModule} from "angular-gauge";
 import {SinglemachinePage} from "../pages/singlemachine/singlemachine";
+import {SplashPage} from "../pages/splash/splash";
 
 
 
@@ -47,7 +48,8 @@ var config = {
     LoginPage,
     SettingsPage,
     MachinePage,
-    SinglemachinePage
+    SinglemachinePage,
+    SplashPage
 
 
   ],
@@ -62,7 +64,7 @@ var config = {
     HttpClientModule,
     JustgageModule,
     ChartsModule,
-    GaugeModule.forRoot()
+    GaugeModule.forRoot(),
 
 
 
@@ -77,7 +79,8 @@ var config = {
     LoginPage,
     SettingsPage,
     MachinePage,
-    SinglemachinePage
+    SinglemachinePage,
+    SplashPage
 
 
   ],
