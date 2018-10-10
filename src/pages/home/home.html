@@ -3,57 +3,37 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-    </ion-title>
+    <ion-title class="title">Dashboard</ion-title>
 
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col col-4 ></ion-col>
-      <ion-col col-8 align-self-center>
 
-          <img class="circle-pic"  [src]="photo">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingText="Pull to refresh"
+      pullingIcoin="arrow-dropdown"
+      refreshingSpinner="circles"
+      refreshingText="..fetching">
 
-      </ion-col>
-      <ion-col col-2></ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-4></ion-col>
-      <ion-col col-8 align-self-center>
-        <div *ngIf="user">
-          {{user}}
-        </div>
-      </ion-col>
-      <ion-col col-2></ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <justgage [options]="options" [max]="max" [value]="value"></justgage>
+    </ion-refresher-content>
+  </ion-refresher>
 
 
-  <canvas baseChart width="300" height="400"
-          [datasets]="lineChartData"
-          [labels]="lineChartLabels"
-          [options]="lineChartOptions"
-          [colors]="lineChartColors"
-          [legend]="lineChartLegend"
-          [chartType]="lineChartType"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"></canvas>
+  <!--Prima riga con il consumo globale dell'intero impianto-->
+  <div id="consumationPlant">
+    <p id="textConsumationPlant">Consumo corrente intero impianto: <b>{{this.correnteImpianto}}</b> Kwh</p>
+  </div>
 
+  <!--Primo grafico, nel quale viene riportato il consumo del singolo macchinario. Cliccabile.-->
+  <!--<div class="headerMachine">Macchine:</div>-->
+  <div class="legend4"></div>
+  <div id="pieChart" class="chart-container"></div>
 
-   `
-  <mwl-gauge
-    [max]="100"
-    [dialStartAngle]="-90"
-    [dialEndAngle]="-90.001"
-    [value]="50"
-    [animated]="true"
-    [animationDuration]="2">
-  </mwl-gauge>
-
+  <!--Seccondo grafico, nel quale viene riportato il consumo del singolo senore del macchinario selezionato-->
+  <!--<div class="headerSensors">Sensori: </div>-->
+  <div id="chart" class="chart-container"></div>
 
 </ion-content>
+
