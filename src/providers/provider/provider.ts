@@ -65,16 +65,6 @@ export class Provider {
   }
 
 
-  async loginWithEmailAndPassword(user: User) {
-    await this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)
-      .then(res => {
-        console.log('dopo'+res);
-        this.user=res;
 
-        this.isLoggedIn = true;
-
-      })
-      .catch(err => console.error(err));
-  }
 
 }

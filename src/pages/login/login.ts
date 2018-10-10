@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Provider} from "../../providers/provider/provider";
 import {HomePage} from "../home/home";
 import {GooglePlus} from "@ionic-native/google-plus";
 import {User} from "../../app/models/User";
+import {AngularFireAuth} from "@angular/fire/auth";
 
 
 /**
@@ -23,7 +24,9 @@ export class LoginPage {
   user = {} as User;
 
   constructor(private navCrtl: NavController,
-              private provider: Provider) {
+              private provider: Provider,
+              private alertCtrl: AlertController,
+              private afAuth: AngularFireAuth) {
 
 
 
@@ -43,13 +46,42 @@ export class LoginPage {
     });
   }
 
-  async EmailPasswordLogin(user:User){
-   await  this.provider.loginWithEmailAndPassword(user);
-    this.navCrtl.setRoot(HomePage,{
+   async EmailPasswordLogin(user:User){
+    console.log("parametri di user"+JSON.stringify(user.email));
+    if(user.email && user.password) {
+        console.log("Provider login");
+        await this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)
+          .then(res => {
+            console.log('dopo'+res);
+            this.provider.user=res;
+            this.provider.isLoggedIn = true;
+            this.navToHomePage();
+          })
+          .catch(err => this.errorLogin());
+      } else {
+        this.errorLogin()
+      }
+    }
+
+
+  errorLogin() {
+    let alert = this.alertCtrl.create({
+      title: 'Errore',
+      message: 'Email o Password errati ',
+      buttons: [
+        {
+          text: 'Ok',
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  navToHomePage(){
+    this.navCrtl.setRoot(HomePage, {
       'user': this.userInfo
     });
   }
-
 
 
 

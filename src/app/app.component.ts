@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, App} from 'ionic-angular';
+import {Nav, Platform, App, ModalController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from "@ionic/storage";
@@ -12,7 +12,7 @@ import { GooglePlus } from '@ionic-native/google-plus';
 import {Provider} from "../providers/provider/provider";
 import {SettingsPage} from "../pages/settings/settings";
 import {MachinePage} from "../pages/machine/machine";
-
+import { SplashPage } from '../pages/splash/splash';
 
 
 @Component({
@@ -30,6 +30,7 @@ export class MyApp {
               public statusBar: StatusBar,
               public splashScreen: SplashScreen,
               private provider: Provider,
+              private modalCtrl: ModalController
               ) {
     this.initializeApp();
 
@@ -48,8 +49,11 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
 
+
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+
+      let splash = this.modalCtrl.create(SplashPage);
+      splash.present();
     });
 
 
