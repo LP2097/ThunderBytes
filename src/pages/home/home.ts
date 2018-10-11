@@ -30,6 +30,12 @@ var ip = "192.168.1.125";
 })
 export class HomePage {
 
+
+
+  notification(){
+    console.log("notifiche");
+  }
+
   doRefresh(refresher){
     if (document.readyState === "complete") {                         // svolge il tutto solo quando l'intera pagina e stata caricata
       this.getDatakwHFactory();
@@ -72,7 +78,6 @@ export class HomePage {
   constructor(public navCtrl: NavController, private http: HttpClient) {
     this.getDatakwHFactory();
 
-
     /*assegno grandezza e altezza del grafico delle macchine*/
     this.width = 900 - this.margin.left - this.margin.right ;
     this.height = 500 - this.margin.top - this.margin.bottom;
@@ -109,15 +114,14 @@ export class HomePage {
     this.http.get("http://" + ip + ":5000/correnteImpianto")
       .subscribe(data =>{
           for(var i=0; i<=2; i++) {
-            console.log(data[i].sum)
             if (data[i].sum) {
               var x = data[i].sum;
               z = z + x;
-              this.correnteImpianto = z.toFixed(3);
             } else {
               this.correnteImpianto += 0
             }
           }
+          this.correnteImpianto = z;
         },
         error =>{
           alert("il server non risponde... attendi e spera");
@@ -145,9 +149,9 @@ export class HomePage {
       .attr("width", '100%')
       .attr("height", '100%')
       .attr("class", "svgMachine")
-      .attr('viewBox','0 0 '+Math.min(this.width,this.height)+' '+ (Math.min(this.width,this.height) - 100) )
+      .attr('viewBox','0 0 '+Math.min(this.width,this.height)+' '+ (Math.min(this.width,this.height) - 60) )
       .append("g")
-      .attr("transform", "translate(" + Math.min(this.width,this.height) / 2 + "," + (this.radius - 50) + ")");
+      .attr("transform", "translate(" + Math.min(this.width,this.height) / 2 + "," + (this.radius - 10) + ")");
   }
   // --------------------------- End inizializzo il grafico delle macchine ---------------------------
 
@@ -156,6 +160,19 @@ export class HomePage {
    * @param data --> dati ricevuti dalla chimata API
    */
   drawPie(data) {
+
+    let bolt = this.svg.selectAll(".bolt")
+      .data(data)
+      .enter().append("g")
+      .attr("class", "bolt")
+
+    bolt.append('text')
+      .attr("x", -45)
+      .attr("y", 20)
+      .attr('font-family', 'FontAwesome')
+      .attr('font-size', "160px" )
+      .text(function(d) { return '\uf0e7' });
+
     let g = this.svg.selectAll(".arc")
       .data(this.pie(data))
       .attr("class", "gMachine")
@@ -174,39 +191,33 @@ export class HomePage {
         }
 
         $('text#text').remove();
-        g.append("text")
-          .attr("x", -100)
-          .attr("id", "text")
-          .attr("y", -45)
-          .attr("dy", ".35em")
-          .text("• Macchina: ")
-          .style("font-size", "18px")
-          .style("font-family", "Cocogoose");
+
+        var lenghtX;                          // definire la posizione sull'asse delle x del nome della macchina
+
+        if(d.data.nomeMacchina.length < 12)
+          lenghtX = -80;
+        else{
+          if(d.data.nomeMacchina == "fornoCottura")
+            lenghtX = -80;
+          else
+            lenghtX = -100;
+        }
 
         g.append("text")
-          .attr("x", -75)
+          .attr("x", lenghtX)
           .attr("id", "text")
-          .attr("y", -20)
+          .attr("y", -190)
           .attr("dy", ".35em")
           .text(d.data.nomeMacchina)
           .style("font-size", "25px")
-          .style("font-family", "GeosansLight");
+          .style("font-family", "Cocogoose");
 
         g.append("text")
-          .attr("x", -110)
+          .attr("x", -45)
           .attr("id", "text")
-          .attr("y", 20)
+          .attr("y", 65)
           .attr("dy", ".35em")
-          .text("• Consumo medio di: ")
-          .style("font-size", "18px")
-          .style("font-family", "Cocogoose");;
-
-        g.append("text")
-          .attr("x", -75)
-          .attr("id", "text")
-          .attr("y", 50)
-          .attr("dy", ".35em")
-          .text(Math.round(d.data.corrente) + " Kwh")
+          .text(d.data.corrente.toFixed(3) + " Kwh")
           .style("font-size", "25px")
           .style("font-family", "GeosansLight");
 
@@ -317,7 +328,7 @@ function prova() {
     .attr("transform", "translate(" + Math.min(width, height) / 2 + "," + (radius - 100) + ")");
 
   path = svg.selectAll('path')
-    .data(pie(x))
+    .data(pie())
     .enter()
     .append('path')
     .attr("d", arc)
@@ -336,7 +347,7 @@ function prova() {
 
   var restOfTheData = function () {
     svg.selectAll("text")
-      .data(pie(x))
+      .data(pie())
       .enter()
       .append("text")
       .transition()
