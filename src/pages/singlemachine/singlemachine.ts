@@ -40,7 +40,7 @@ export class SinglemachinePage {
 
 
   getMachine(machine){
-    this.http.get<VerniciaturaPrimaMano>("http://localhost:4000/"+machine+"") //equivalente del metodo get di ajax
+    this.http.get<VerniciaturaPrimaMano>("http://172.20.10.2:5000/"+machine+"") //equivalente del metodo get di ajax
       .timeout(3000)
       .subscribe(data =>{
 
