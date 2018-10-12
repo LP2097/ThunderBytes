@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {AlertController, NavController, Platform} from 'ionic-angular';
 import { transition } from 'd3-transition';
 import {HttpClient} from '@angular/common/http';
 
@@ -12,6 +12,10 @@ import * as d3Shape from "d3-shape";
 import * as d3Interpolate from "d3-interpolate";
 import * as d3Transition from 'd3-transition';
 import * as $ from 'jquery'
+import {LocalNotifications} from "@ionic-native/local-notifications";
+import {Observable} from "rxjs/Observable";
+import {influxData} from "../../app/models/InfluxData";
+import * as _ from 'underscore';
 
 // --------------------------- Start variabili grafico sensori ---------------------------
 //var x = Chart;
@@ -22,7 +26,7 @@ var radius;
 // --------------------------- End variabili grafico sensori ---------------------------
 
 var z = 0;                  // variabile per calcolare la corrente dell'intero impianto
-var ip = "192.168.1.125";
+var ip = "172.20.10.2";
 
 @Component({
   selector: 'page-home',
@@ -31,6 +35,7 @@ var ip = "192.168.1.125";
 export class HomePage {
 
 
+  retrivedData : influxData;
 
   notification(){
     console.log("notifiche");
@@ -75,7 +80,30 @@ export class HomePage {
   svg: any;
   data;
 
-  constructor(public navCtrl: NavController, private http: HttpClient) {
+  constructor(public navCtrl: NavController,
+              private http: HttpClient,
+              private localNotifications: LocalNotifications,
+              public alertCtrl: AlertController,
+              private plt:Platform,) {
+
+
+
+    Observable
+      .interval(10000)
+      .timeInterval()
+      .flatMap(() => this.getAllInfluxData())
+      .subscribe(data => {
+        console.log("log: "+this.retrivedData);
+        let dataAnalisys = _.max(this.retrivedData, function (item) {
+          return item.temperatura;
+        });
+        console.log(dataAnalisys.temperatura);
+        if (dataAnalisys.temperatura>0)
+          this.scheduleNotifications();
+      });
+
+
+
     this.getDatakwHFactory();
 
     /*assegno grandezza e altezza del grafico delle macchine*/
@@ -87,7 +115,32 @@ export class HomePage {
     width = this.width;
     height = this.height;
     radius = this.radius;
+
+    //INIZIO NOTIFICHE
+    this.plt.ready().then((rdy)=>{
+      // @ts-ignore
+      this.localNotifications.on('click',(notification, state)=>{
+        let json=JSON.parse(notification.data);
+
+        let alert=this.alertCtrl.create({
+          title: notification.title,
+          subTitle: json.mydata
+        });
+        alert.present();
+      });
+    });
+
   }
+
+  //Chiamata di notifica
+  public scheduleNotifications(){
+    this.localNotifications.schedule({
+      title: 'prova',
+      text: 'il valore è fuori norma',
+      data: {mydata:'metadata'}
+    })
+  }
+
 
   /*funzione che si avvia automaticamente dopo il costruttore e avvio
   * le funzioni per disegnare il grafico delle macchine*/
@@ -108,6 +161,17 @@ export class HomePage {
         error =>{
           alert("il server non risponde... attendi e spera");
         })
+  }
+
+  async getAllInfluxData(){
+   await this.http.get<influxData>("http://" + ip + ":5000/data")
+      .subscribe(data =>{
+          this.retrivedData=data;
+        return data;
+        },
+        error =>{
+          alert("il server non risponde... attendi e spera");
+        });
   }
 
   getDatakwHFactory(){
@@ -246,7 +310,6 @@ export class HomePage {
   h:number = 100;
 
 
-
   drawLegend(){
     this.svgLegned4 = d3.select(".legend4").append("svg")
       .attr("width", this.width)
@@ -291,6 +354,14 @@ export class HomePage {
       .style("font-size", 18)
       .style("font-family", "Roboto");
   }
+
+
+
+
+
+
+
+  //TODO GESTIONE CHIAMATA E NOTIIFICA DATI
 
 }
 
@@ -393,5 +464,8 @@ function prova() {
   }
 
   setTimeout(restOfTheData,1000);
+
+
+
 }
 
