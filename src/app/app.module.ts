@@ -30,6 +30,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 
 
 
+
 var config = {
   apiKey: "AIzaSyCs6L9tlde9ZWw_3Fo4VNLE2wCSeb-8XeY",
   authDomain: "thunderbytes-28c25.firebaseapp.com",
@@ -65,6 +66,7 @@ var config = {
     ChartsModule,
     GaugeModule.forRoot(),
     NgCircleProgressModule.forRoot({})
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -85,6 +87,7 @@ var config = {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GooglePlus,
     Provider,
+    LocalNotifications
 
 
   ]

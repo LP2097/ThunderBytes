@@ -85,6 +85,7 @@ export class SinglemachinePage {
     this.sumData(this.nameMachine);
   }
 
+
   //funzione al click del segmento somma o media situato in basso
   segmentChangedVal(selectVal){
     if(selectVal.value == "somma")
