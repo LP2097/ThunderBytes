@@ -4,13 +4,6 @@ import {Http} from "@angular/http";
 import {HttpClient} from "@angular/common/http";
 import {SinglemachinePage} from "../singlemachine/singlemachine";
 
-/**
- * Generated class for the MachinePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-machine',
@@ -28,7 +21,7 @@ export class MachinePage {
     console.log('ionViewDidLoad MachinePage');
   }
 
-  getMachine(machine){
+  readChart(machine){
     console.log(machine);
     this.navCtrl.push(SinglemachinePage, {
       'machine':machine,

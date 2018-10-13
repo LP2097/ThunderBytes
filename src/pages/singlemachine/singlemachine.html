@@ -7,15 +7,16 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>singlemachine</ion-title>
+    <ion-title>{{this.nameMachine}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-
-  <ion-refresher (ionRefresh)="doRefresh()">
+<ion-content>
+    <!--refresh page and data-->
+    <!--
+    <ion-refresher (ionRefresh)="doRefresh()">
     <ion-refresher-content
       pullingText="Pull to refresh"
       pullingIcoin="arrow-dropdown"
@@ -23,10 +24,63 @@
       refreshingText="..fetching">
 
     </ion-refresher-content>
-  </ion-refresher>
+  </ion-refresher>-->
+
+  <ion-segment color="primary" style="margin-top: 2%;" (ionChange)="segmentChangedTime($event)">
+      <ion-segment-button value="ora">
+        1 ora
+      </ion-segment-button>
+      <ion-segment-button value="minuti">
+        10 minuti
+      </ion-segment-button>
+      <ion-segment-button value="giorno">
+        1 giorno
+      </ion-segment-button>
+  </ion-segment>
+
+  <div id="consumationFR">
+    <p id="textconsumationFR">Consumo di acqua {{this.timeSelect}}</p>
+  </div>
+
+  <!--Per il titolo: utilizzo il font answer per stampare le mie icone e richiamando il loro relativo codice
+      il resto sono semplici settaggi del pacchetto ngCircleProgress -->
+  <circle-progress class="circleProcess"
+    [percent]= this.percentMeasure
+    [backgroundColor]= "'#ffffff'"
+    [backgroundOpacity]= "1"
+    [backgroundStroke]= "'#000000'"
+    [backgroundPadding]= "17"
+    [radius]= "65"
+    [space]= -2
+    [outerStrokeWidth]= 2
+    [outerStrokeColor]= "'#808080'"
+    [innerStrokeColor]= "'#e7e8ea'"
+    [innerStrokeWidth]= 2
+    [titleFontSize]= 60
+    [subtitleFontSize]= 30
+    [title]= this.titleGraphs
+    [subtitleFormat]= this.Subtitle
+    [animateTitle]="false"
+    [animateSubtitle]="true"
+    [animationDuration]= "2000"
+    [showUnits]= false
+    [responsive]= true
+  ></circle-progress>
+
+  <div class="controlVal">
+    <ion-segment [(ngModel)]="val" color="danger" style="margin-top: 2%; margin-left: 50%;" (ionChange)="segmentChangedVal($event)">
+      <ion-segment-button value="media" >
+        Media
+      </ion-segment-button>
+      <ion-segment-button value="somma">
+        Somma
+      </ion-segment-button>
+    </ion-segment>
+  </div>
 
 
-<div *ngIf="temperature">
+
+<!--<div *ngIf="temperature">
   <div *ngIf="lineChartLabels">
   <canvas baseChart width="300" height="400"
           [datasets]="lineChartDatas"
@@ -39,7 +93,8 @@
           (chartClick)="chartClicked($event)"></canvas>
 
   </div>
-</div>
+</div>-->
+
 <div *ngIf="value">
   <justgage [options]="options" [max]="max" [value]="value"></justgage>
 </div>

@@ -4,11 +4,11 @@
       <ion-icon name="menu" class="styleIcon"></ion-icon>
     </button>-->
     <ion-title class="title">Dashboard</ion-title>
-    <div class="notifica styleIcon" value="8" float-right (click)="notification()"><i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i></div>
+    <div class="notifica styleIcon" value="5" float-right (click)="notification()"><i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i></div>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="contentHome">
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
       pullingText="Pull to refresh"
@@ -21,7 +21,7 @@
 
   <!--Prima riga con il consumo globale dell'intero impianto-->
   <div id="consumationPlant">
-    <p id="textConsumationPlant">Consumo intero impianto: <b class="consumo">{{this.correnteImpianto}}</b> Kwh</p>
+    <p id="textConsumationPlant">Consumo intero impianto: <b class="consumo">{{this.correnteImpianto.toFixed(3)}}</b> Kwh</p>
   </div>
 
   <!--Primo grafico, nel quale viene riportato il consumo del singolo macchinario. Cliccabile.-->
