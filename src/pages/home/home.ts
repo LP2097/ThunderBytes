@@ -22,15 +22,13 @@ var radius;
 // --------------------------- End variabili grafico sensori ---------------------------
 
 var z = 0;                  // variabile per calcolare la corrente dell'intero impianto
-var ip = "192.168.1.125";
+var ip = "localhost";
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-
-
 
   notification(){
     console.log("notifiche");
@@ -44,7 +42,7 @@ export class HomePage {
       $('.arcMachine').remove();
 
 
-      this.http.get("http://" + ip + ":5000/correnteForno")
+      this.http.get("http://" + ip + ":5000/correnteTotale")
         .subscribe(data => {
             this.drawPie(data);                                        //chiamata alla funzione per disegnare il grafico delle macchine
           },
@@ -100,7 +98,7 @@ export class HomePage {
 
   // ----------------------------------------- Start chimata API -----------------------------------------
   async getData(){
-    await this.http.get("http://" + ip + ":5000/correnteForno")
+    await this.http.get("http://" + ip + ":5000/correnteTotale")
       .subscribe(data =>{
           this.drawPie(data);                                        //chiamata alla funzione per disegnare il grafico delle macchine
           this.drawLegend();                                         //chiamata alla funzione per disegnare la legenda delle macchine
@@ -114,8 +112,8 @@ export class HomePage {
     this.http.get("http://" + ip + ":5000/correnteImpianto")
       .subscribe(data =>{
           for(var i=0; i<=2; i++) {
-            if (data[i].sum) {
-              var x = data[i].sum;
+            if (data[i].corrente) {
+              var x = data[i].corrente;
               z = z + x;
             } else {
               this.correnteImpianto += 0
@@ -133,7 +131,7 @@ export class HomePage {
   // ---------------------------- Start inizializzo il grafico delle macchine ---------------------------
   initSvg() {
     this.color = d3Scale.scaleOrdinal()
-      .range(["#FFA500", "#00FF00", "#FF0000", "#6b486b", "#FF00FF", "#d0743c", "#00FA9A"]);
+      .range(["#3ACCE1", "#D9DBDC", "#60DD49", "#FFBF00", "#EA2B1F", "#DD49A9", "#37FF00"]);
 
     this.arc = d3Shape.arc()
       .outerRadius(this.radius - 60)
@@ -164,7 +162,7 @@ export class HomePage {
     let bolt = this.svg.selectAll(".bolt")
       .data(data)
       .enter().append("g")
-      .attr("class", "bolt")
+      .attr("class", "bolt");
 
     bolt.append('text')
       .attr("x", -45)
@@ -242,8 +240,8 @@ export class HomePage {
   svgLegned4: any;
   newdataL: any;
   newdatah: any = 0;
-  w:number = 500;
-  h:number = 100;
+  w:number = 550;
+  h:number = 140;
 
 
 
@@ -271,7 +269,7 @@ export class HomePage {
           return "translate(" + (this.newdataL) + ","+ this.newdatah +")"
 
         }
-      })
+      });
 
     legend4.append('rect')
       .attr("x", 0)
@@ -311,7 +309,7 @@ function prova() {
     .padAngle(.03);
 
   color = d3Scale.scaleOrdinal()
-    .range(["#FFA500", "#00FF00", "#FF0000", "#6b486b", "#FF00FF", "#d0743c", "#00FA9A"]);
+    .range(["#F6511D", "#FFB400", "#00A6ED", "#7FB800", "#0D2C54", "#F0C808", "#FFF1D0"]);
 
   arc = d3Shape.arc()
     .outerRadius(radius - 100)

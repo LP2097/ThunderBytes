@@ -8,6 +8,7 @@ import { SinglemachinePage } from './singlemachine';
   ],
   imports: [
     IonicPageModule.forChild(SinglemachinePage),
+
   ],
 })
 export class SinglemachinePageModule {}
