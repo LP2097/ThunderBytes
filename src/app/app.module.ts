@@ -27,6 +27,7 @@ import {GaugeModule} from "angular-gauge";
 import {SinglemachinePage} from "../pages/singlemachine/singlemachine";
 import {SplashPage} from "../pages/splash/splash";
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import {LocalNotifications} from "@ionic-native/local-notifications";
 
 
 

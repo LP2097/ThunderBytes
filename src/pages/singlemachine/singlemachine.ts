@@ -2,14 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {HttpClient} from "@angular/common/http";
 import * as $ from 'jquery'
-import {VerniciaturaPrimaMano} from "../../app/models/CharData";
-
-/**
- * Generated class for the SinglemachinePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import * as moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -18,13 +11,44 @@ import {VerniciaturaPrimaMano} from "../../app/models/CharData";
 })
 export class SinglemachinePage {
 
-  public lineChartData;
-
+  //variabili grafico a linee
+  lineChartData:Array<any> = [{data: []}];
+  lineChartLabels:Array<any> = [];
+  lineChartLegend:boolean = false;
+  lineChartType:string = 'line';
+  lineChartOptions:any = {
+    responsive: true
+  };
+  lineChartColors:Array<any> = [
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    },
+    { // dark grey
+      backgroundColor: 'rgba(77,83,96,0.2)',
+      borderColor: 'rgba(77,83,96,1)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)'
+    },
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    }
+  ];
 
   titleGraphs: string = "\uf043";
   Subtitle: string;
   percentMeasure: string = "20";
-  unitMeasure: string = " l";
   nameMachine: string;
   name;
   timeSelect: string;
@@ -55,12 +79,21 @@ export class SinglemachinePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,  public http: HttpClient) {
     this.nameMachine = navParams.get('machine');
+  }
 
+  //refresh dei dati controlla se era su somma o media ed esegue il refresh
+  doRefresh(refresher){
+    if(this.val == "somma")
+      this.sumData();
+    else if(this.val == "media")
+      this.mediaData();
+
+    if (refresher != 0)
+      refresher.complete();
   }
 
   //all'avvio della pagina nasconde il grafico con relativi bottoni e scritte
   ionViewDidLoad(){
-      $(".circleProcess, .controlVal, #consumationFR, .loader").hide();
 
       if(this.nameMachine == "FornoRiscaldamento"){
       this.nameMachine = "Forno riscaldamento";
@@ -77,27 +110,42 @@ export class SinglemachinePage {
     }else if(this.nameMachine == "motoreDue") {
       this.nameMachine = "Motore due";
     }
+
+    //di default seleziono i minuti e mostro i grafici
+    this.time = "minuti";
+    this.sumData()
+
   }
 
   //al click salva il periodo selezionato e richiama la funziona della somma quella predefinita
   segmentChangedTime(selectTime){
     this.time = selectTime.value;
-    this.sumData(this.nameMachine);
+    this.sumData();
+  }
+
+  //svuoto gli array del grafico
+  initialvarGraphs(){
+    this.lineChartData = [{data: []}];
+    this.lineChartLabels.length = null;
   }
 
 
   //funzione al click del segmento somma o media situato in basso
   segmentChangedVal(selectVal){
-    if(selectVal.value == "somma")
+    if(selectVal.value == "somma"){
+      this.val = "somma";
       this.sumData();
-    else if(selectVal.value == "media")
+    }
+    else if(selectVal.value == "media"){
       this.mediaData();
-
+      this.val = "media";
+    }
   }
 
   //funzione che gestisde le api riguardanti la somma
-  async sumData(nameMachine){
-    $(".circleProcess, .controlVal, #consumationFR").show();              // mostro il grafico e scritte nascoste prima
+  sumData(){
+    $(".circleProcess, .controlVal, #consumationFR, .graphs").show();              // mostro il grafico e scritte nascoste prima
+
     if(this.time == "ora") {
       this.timeSelect = "nell'ultima ora";
       switch (this.nameMachine) {
@@ -132,7 +180,7 @@ export class SinglemachinePage {
       }
     }else if(this.time == "minuti"){
       this.timeSelect = "nell'ultimi dieci minuti";
-      switch (nameMachine) {
+      switch (this.nameMachine) {
         case "Forno riscaldamento":
           this.apiMachine = "sumFornoRiscaldamentoUltimiMinuti";
           break;
@@ -164,7 +212,7 @@ export class SinglemachinePage {
       }
     }else if(this.time == "giorno"){
       this.timeSelect = "nell'ultimo giorno";
-      switch (nameMachine) {
+      switch (this.nameMachine) {
         case "Forno riscaldamento":
           this.apiMachine = "sumFornoRiscaldamentoUltimoGiorno";
           break;
@@ -233,7 +281,6 @@ export class SinglemachinePage {
       }
     }else if(this.time == "minuti"){
       this.timeSelect = "nell'ultimi dieci minuti";
-      console.log(this.nameMachine);
       switch (this.nameMachine) {
         case "Forno riscaldamento":
           this.apiMachine = "meanFornoRiscaldamentoUltimiMinuti";
@@ -302,49 +349,104 @@ export class SinglemachinePage {
 
 
   createCircle(){
-    this.Subtitle = (percent: number) : string => { return percent + this.unitMeasure}
+    //this.Subtitle = (percent: number) : string => { return percent + " %"}
   }
 
-
   getMachine(machine){
-    //utilizzare machine per fare chiamate api
      this.http.get("http://localhost:5000/" + this.apiMachine) //equivalente del metodo get di ajax
        .timeout(3000)
        .subscribe(data =>{
-         console.log(data);
           if(machine == "Forno riscaldamento"){
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.amperometro = data[0].amperometro;
             this.umidita = data[0].umidita;
             this.ventilatore = data[0].ventilatore;
+            console.log(data[0].umidita);
+            this.calcPercent();
+
+            this.initialvarGraphs();
+            for(var i=0; i<data.length; i++){
+              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
+              this.lineChartData[0].data.push(data[i].umidita);
+              this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
+            }
           }else if(machine == "Forno raffredamento"){
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.amperometro = data[0].amperometro;
             this.umidita = data[0].umidita;
             this.ventilatore = data[0].ventilatore;
+            this.calcPercent();
+
+            this.initialvarGraphs();
+            for(var i=0; i<data.length; i++){
+              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
+              this.lineChartData[0].data.push(data[i].umidita);
+              this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
+            }
           }else if(machine == "Forno cottura"){
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.amperometro = data[0].amperometro;
             this.umidita = data[0].umidita;
             this.ventilatore = data[0].ventilatore;
+            this.calcPercent();
+
+            this.initialvarGraphs();
+            for(var i=0; i<data.length; i++){
+              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
+              this.lineChartData[0].data.push(data[i].umidita);
+              this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
+            }
           }else if(machine == "Verniciatura Prima Mano"){
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.umidita = data[0].umidita;
+            this.calcPercent();
+
+            this.initialvarGraphs();
+            for(var i=0; i<data.size(); i++){
+              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
+              this.lineChartData[0].data.push(data[i].umidita);
+              this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
+            }
           }else if(machine == "Verniciatura Secconda Mano"){
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.umidita = data[0].umidita;
+            this.calcPercent();
+
+            this.initialvarGraphs();
+            for(var i=0; i<data.length; i++){
+              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
+              this.lineChartData[0].data.push(data[i].umidita);
+              this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
+            }
           }else if(machine == "Motore uno"){
             this.rpm = data[0].rpm;
             this.timeData = data[0].time;
+            this.calcPercent();
+
+            this.initialvarGraphs();
+            for(var i=0; i<data.length; i++){
+              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
+              this.lineChartData[0].data.push(data[i].rpm);
+              this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
+            }
           }else if(machine == "Motore due"){
             this.rpm = data[0].rpm;
             this.timeData = data[0].time;
+            this.calcPercent();
+
+            this.initialvarGraphs();
+            for(var i=0; i<data.length; i++){
+              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
+              this.lineChartData[0].data.push(data[i].rpm);
+              this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
+            }
           }
+          console.log(this.umidita);
            this.updatePercentMeasure();
            this.createCircle();
          },
@@ -353,16 +455,44 @@ export class SinglemachinePage {
          })
    }
 
+   calcPercent(){
+    switch(this.time){
+     case "minuti":
+         this.umidita = (this.umidita/7000)*100;
+         this.temperature = (this.temperature/7000)*100;
+         this.ventilatore = (this.ventilatore/70000)*100;
+         this.rpm = (this.rpm/70000)*100;
+         this.amperometro = (this.amperometro/11200)*100;
+         break;
+     case "ora":
+        this.umidita = (this.umidita/42000)*100;
+        this.temperature = (this.temperature/42000)*100;
+        this.ventilatore = (this.ventilatore/4200000)*100;
+        this.rpm = (this.rpm/4200000)*100;
+        this.amperometro = (this.amperometro/67200)*100;
+        break;
+     case "giorno":
+       this.umidita = (this.umidita/1008000)*100;
+       this.temperature = (this.temperature/1008000)*100;
+       this.ventilatore = (this.ventilatore/100800000)*100;
+       this.rpm = (this.rpm/100800000)*100;
+       this.amperometro = (this.amperometro/1612800)*100;
+       break;
+     }
+   }
+
   updatePercentMeasure(){
     //variabile che cambia in base al passaggio da un sensore all'altro
-    this.percentMeasure = this.umidita;
+    this.percentMeasure = this.umidita.toFixed(2);
   }
 
-   /*doRefresh(){
-     console.log("chiamata a get Machine");
-     this.temperature=[];
-     this.time=[];
-     this.getMachine(this.machine);
-   }*/
 
+  //funzioni al click sul grafico
+  chartClicked(e:any):void {
+    console.log(e);
+  }
+
+  chartHovered(e:any):void {
+    console.log(e);
+  }
 }
