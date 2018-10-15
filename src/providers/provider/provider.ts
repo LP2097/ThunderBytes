@@ -1,20 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {GooglePlus} from "@ionic-native/google-plus";
-import {User} from "../../app/models/User";
-import {AngularFireAuth} from "@angular/fire/auth";
 
-
-/*
-  Generated class for the Provider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class Provider {
 
-  constructor(public http: HttpClient, private googlePlus: GooglePlus, private afAuth: AngularFireAuth) {
+  constructor(public http: HttpClient, private googlePlus: GooglePlus) {
     console.log('Hello Provider Provider');
   }
 
@@ -63,8 +54,4 @@ export class Provider {
       })
       .catch(err => console.error(err));
   }
-
-
-
-
 }

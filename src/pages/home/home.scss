@@ -23,7 +23,7 @@
   src: url(../../assets/font/bolt.ttf);
 }
 
-.title{
+Ion-title{
   font-family: primetime;
 }
 
@@ -39,19 +39,20 @@
 .notifica {
   position:relative;
 }
+
 .notifica[value]:after {
     content:attr(value);
-    position:absolute;
-    top:-8px;
+    position: absolute;
+    top: -8px;
     right: -4px;
-    font-size:1em;
-    background:red;
-    color:white;
-    width:16px;
-    height:16px;
-    text-align:center;
-    line-height:15px;
-    border-radius:40%;
+    font-size: 1em;
+    background: #FF1654;
+    color: white;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 15px;
+    border-radius: 40%;
 }
 
 /*.legend4{
@@ -100,6 +101,5 @@
 }
 
 .consumo{
-  font-size: 25px;
-  color: #32db64;
+  font-size: 23px;
 }

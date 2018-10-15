@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {AlertController, NavController, Platform} from 'ionic-angular';
 import { transition } from 'd3-transition';
 import {HttpClient} from '@angular/common/http';
-
-//import {PieChart} from '../../data/data'
-//import {Chart} from '../../data/data'
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -12,6 +9,10 @@ import * as d3Shape from "d3-shape";
 import * as d3Interpolate from "d3-interpolate";
 import * as d3Transition from 'd3-transition';
 import * as $ from 'jquery'
+import {LocalNotifications} from "@ionic-native/local-notifications";
+import {Observable} from "rxjs/Observable";
+import {influxData} from "../../app/models/InfluxData";
+import * as _ from 'underscore';
 
 // --------------------------- Start variabili grafico sensori ---------------------------
 //var x = Chart;
@@ -22,7 +23,7 @@ var radius;
 // --------------------------- End variabili grafico sensori ---------------------------
 
 var z = 0;                  // variabile per calcolare la corrente dell'intero impianto
-var ip = "192.168.1.125";
+var ip = "localhost";
 
 @Component({
   selector: 'page-home',
@@ -30,7 +31,7 @@ var ip = "192.168.1.125";
 })
 export class HomePage {
 
-
+  retrivedData : influxData;
 
   notification(){
     console.log("notifiche");
@@ -44,7 +45,7 @@ export class HomePage {
       $('.arcMachine').remove();
 
 
-      this.http.get("http://" + ip + ":5000/correnteForno")
+      this.http.get("http://" + ip + ":5000/correnteTotale")
         .subscribe(data => {
             this.drawPie(data);                                        //chiamata alla funzione per disegnare il grafico delle macchine
           },
@@ -58,6 +59,7 @@ export class HomePage {
   }
 
   correnteImpianto: number = 0;
+  currentSensors: string;
 
   margin = {top: 30, right: 20, bottom: 10, left: 20};
   width: number;
@@ -75,7 +77,30 @@ export class HomePage {
   svg: any;
   data;
 
-  constructor(public navCtrl: NavController, private http: HttpClient) {
+  constructor(public navCtrl: NavController,
+              private http: HttpClient,
+              private localNotifications: LocalNotifications,
+              public alertCtrl: AlertController,
+              private plt:Platform,) {
+
+
+
+    Observable
+      .interval(10000)
+      .timeInterval()
+      .flatMap(() => this.getAllInfluxData())
+      .subscribe(data => {
+        //console.log("log: "+this.retrivedData);
+        let dataAnalisys = _.max(this.retrivedData, function (item) {
+          return item.temperatura;
+        });
+        console.log(dataAnalisys.temperatura);
+        if (dataAnalisys.temperatura>0)
+          this.scheduleNotifications();
+      });
+
+
+
     this.getDatakwHFactory();
 
     /*assegno grandezza e altezza del grafico delle macchine*/
@@ -87,7 +112,32 @@ export class HomePage {
     width = this.width;
     height = this.height;
     radius = this.radius;
+
+    //INIZIO NOTIFICHE
+    this.plt.ready().then((rdy)=>{
+      // @ts-ignore
+      this.localNotifications.on('click',(notification, state)=>{
+        let json=JSON.parse(notification.data);
+
+        let alert=this.alertCtrl.create({
+          title: notification.title,
+          subTitle: json.mydata
+        });
+        alert.present();
+      });
+    });
+
   }
+
+  //Chiamata di notifica
+  public scheduleNotifications(){
+    this.localNotifications.schedule({
+      title: 'prova',
+      text: 'il valore è fuori norma',
+      data: {mydata:'metadata'}
+    })
+  }
+
 
   /*funzione che si avvia automaticamente dopo il costruttore e avvio
   * le funzioni per disegnare il grafico delle macchine*/
@@ -100,7 +150,7 @@ export class HomePage {
 
   // ----------------------------------------- Start chimata API -----------------------------------------
   async getData(){
-    await this.http.get("http://" + ip + ":5000/correnteForno")
+    await this.http.get("http://" + ip + ":5000/correnteTotale")
       .subscribe(data =>{
           this.drawPie(data);                                        //chiamata alla funzione per disegnare il grafico delle macchine
           this.drawLegend();                                         //chiamata alla funzione per disegnare la legenda delle macchine
@@ -110,12 +160,23 @@ export class HomePage {
         })
   }
 
+  async getAllInfluxData(){
+   await this.http.get<influxData>("http://" + ip + ":5000/dataTotale")
+      .subscribe(data =>{
+          this.retrivedData=data;
+        return data;
+        },
+        error =>{
+          alert("il server non risponde... attendi e spera");
+        });
+  }
+
   getDatakwHFactory(){
-    this.http.get("http://" + ip + ":5000/correnteImpianto")
+    this.http.get("http://" + ip + ":5000/correnteTotale")
       .subscribe(data =>{
           for(var i=0; i<=2; i++) {
-            if (data[i].sum) {
-              var x = data[i].sum;
+            if (data[i].corrente) {
+              var x = data[i].corrente;
               z = z + x;
             } else {
               this.correnteImpianto += 0
@@ -131,9 +192,10 @@ export class HomePage {
   // ----------------------------------------- End chimata API ------------------------------------------*/
 
   // ---------------------------- Start inizializzo il grafico delle macchine ---------------------------
+
   initSvg() {
     this.color = d3Scale.scaleOrdinal()
-      .range(["#FFA500", "#00FF00", "#FF0000", "#6b486b", "#FF00FF", "#d0743c", "#00FA9A"]);
+      .range(["#3ACCE1", "#D9DBDC", "#60DD49", "#FFBF00", "#EA2B1F", "#DD49A9", "#37FF00"]);
 
     this.arc = d3Shape.arc()
       .outerRadius(this.radius - 60)
@@ -164,7 +226,7 @@ export class HomePage {
     let bolt = this.svg.selectAll(".bolt")
       .data(data)
       .enter().append("g")
-      .attr("class", "bolt")
+      .attr("class", "bolt");
 
     bolt.append('text')
       .attr("x", -45)
@@ -182,7 +244,7 @@ export class HomePage {
     g.append("path").attr("d", this.arc)
       .style("fill", (d: any) => this.color(d.data.nomeMacchina))
       .attr("class", (d: any) => "arcMachine")
-      .on("click", function (d) {
+      .on("click", (d: any) => {
 
         $('div.headerSensors').show();
 
@@ -213,7 +275,7 @@ export class HomePage {
           .style("font-family", "Cocogoose");
 
         g.append("text")
-          .attr("x", -45)
+          .attr("x", -75)
           .attr("id", "text")
           .attr("y", 65)
           .attr("dy", ".35em")
@@ -221,17 +283,6 @@ export class HomePage {
           .style("font-size", "25px")
           .style("font-family", "GeosansLight");
 
-
-        switch (d.data.nomeMacchina) {
-          case "fornoCottura":
-            //x = PieChart;
-            //prova();
-            break;
-          case "fornoRiscaldamento":
-            //x = Chart;
-            //prova();
-            break;
-        }
       });
   }
 
@@ -242,9 +293,8 @@ export class HomePage {
   svgLegned4: any;
   newdataL: any;
   newdatah: any = 0;
-  w:number = 500;
-  h:number = 100;
-
+  w:number = 550;
+  h:number = 140;
 
 
   drawLegend(){
@@ -271,7 +321,7 @@ export class HomePage {
           return "translate(" + (this.newdataL) + ","+ this.newdatah +")"
 
         }
-      })
+      });
 
     legend4.append('rect')
       .attr("x", 0)
@@ -292,106 +342,13 @@ export class HomePage {
       .style("font-family", "Roboto");
   }
 
-}
-
-var pie;
-var color;
-var arc;
-var svg;
-var path;
-var translateHeight = (Math.min(width, height) / 2) - 80;
-var translateWidth = Math.min(width, height) / 2;
-
-function prova() {
-  boolCreateGraphsS = true;
-
-  pie = d3Shape.pie()
-    .value((d: any) => d.sensori)
-    .sort(null)
-    .padAngle(.03);
-
-  color = d3Scale.scaleOrdinal()
-    .range(["#FFA500", "#00FF00", "#FF0000", "#6b486b", "#FF00FF", "#d0743c", "#00FA9A"]);
-
-  arc = d3Shape.arc()
-    .outerRadius(radius - 100)
-    .innerRadius(80);
-
-  svg = d3.select("#chart")
-    .append("svg")
-    .attr("width", '100%')
-    .attr("height", '100%')
-    .attr('viewBox','0 0 '+Math.min(width, height)+' '+Math.min(width, height))
-    .attr("class", "shadow")
-    .attr("class", "fuck")
-    .append('g')
-    .attr("transform", "translate(" + Math.min(width, height) / 2 + "," + (radius - 100) + ")");
-
-  path = svg.selectAll('path')
-    .data(pie())
-    .enter()
-    .append('path')
-    .attr("d", arc)
-    .style("fill", (d: any) => color(d.data.x))
-    .transition()
-    .duration(1000)
-    .attrTween("d", (d: any) => {
-      var interpolate = d3Interpolate.interpolate({startAngle: 0, endAngle: 0}, d);
-      return function (t) {
-        return arc(interpolate(t));
-      };
-    });
-
-  path = d3Transition.transition();
 
 
-  var restOfTheData = function () {
-    svg.selectAll("text")
-      .data(pie())
-      .enter()
-      .append("text")
-      .transition()
-      .duration(200)
-      .attr("transform", (d: any) => {
-        return "translate(" + arc.centroid(d) + ")";
-      })
-      .attr("dy", ".4em")
-      .attr("text-anchor", "middle")
-      .text((d: any) => d.data.sensori)
-      .style("fill", "#fff")
-      .style("font-size", "20px");
-
-    var legendRectSize = 15;
-    var legendSpacing = 10;
-    var legendHeight = legendRectSize + legendSpacing;
-
-    var legend = svg.selectAll('.legend')
-      .data(color.domain())
-      .enter()
-      .append('g')
-      .attr("class", "legend")
-      .attr("transform", function (d, i) {
-        return 'translate(-35,' + ((i * legendHeight) - 50 + ')');
-      });
-
-    legend.append('rect')
-      .attr("width", legendRectSize)
-      .attr("height", legendRectSize)
-      .style("fill", (d: any) => color(d))
-      .style("stroke", "#fff");
 
 
-    legend.append('text')
-      .attr("x", 25)
-      .attr("y", 15)
-      .text(function (d) {
-        return d;
-      })
-      .style("fill", "#237")
-      .style("font-size", "18px")
-      .style("font-family", "Cocogoose");
-  }
 
-  setTimeout(restOfTheData,1000);
+
+  //TODO GESTIONE CHIAMATA E NOTIIFICA DATI
+
 }
 
