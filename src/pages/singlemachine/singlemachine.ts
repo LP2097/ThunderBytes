@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {HttpClient} from "@angular/common/http";
 import * as $ from 'jquery'
 import * as moment from 'moment';
+import {influxData} from "../../app/models/InfluxData";
 
 @IonicPage()
 @Component({
@@ -353,7 +354,7 @@ export class SinglemachinePage {
   }
 
   getMachine(machine){
-     this.http.get("http://localhost:5000/" + this.apiMachine) //equivalente del metodo get di ajax
+     this.http.get<influxData[]>("http://localhost:5000/" + this.apiMachine) //equivalente del metodo get di ajax
        .timeout(3000)
        .subscribe(data =>{
           if(machine == "Forno riscaldamento"){
@@ -366,7 +367,7 @@ export class SinglemachinePage {
             this.calcPercent();
 
             this.initialvarGraphs();
-            for(var i=0; i<data.length; i++){
+            for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
@@ -380,7 +381,7 @@ export class SinglemachinePage {
             this.calcPercent();
 
             this.initialvarGraphs();
-            for(var i=0; i<data.length; i++){
+            for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
@@ -394,7 +395,7 @@ export class SinglemachinePage {
             this.calcPercent();
 
             this.initialvarGraphs();
-            for(var i=0; i<data.length; i++){
+            for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
@@ -406,7 +407,7 @@ export class SinglemachinePage {
             this.calcPercent();
 
             this.initialvarGraphs();
-            for(var i=0; i<data.size(); i++){
+            for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
@@ -418,7 +419,7 @@ export class SinglemachinePage {
             this.calcPercent();
 
             this.initialvarGraphs();
-            for(var i=0; i<data.length; i++){
+            for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
@@ -429,7 +430,7 @@ export class SinglemachinePage {
             this.calcPercent();
 
             this.initialvarGraphs();
-            for(var i=0; i<data.length; i++){
+            for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].rpm);
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
@@ -440,7 +441,7 @@ export class SinglemachinePage {
             this.calcPercent();
 
             this.initialvarGraphs();
-            for(var i=0; i<data.length; i++){
+            for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].rpm);
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
