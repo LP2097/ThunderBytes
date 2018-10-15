@@ -30,8 +30,4 @@ export class MachinePage {
 
   }
 
-
-
-
-
 }

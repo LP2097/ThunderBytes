@@ -68,6 +68,9 @@ export class SinglemachinePage {
   //salvo la data selezionata cosi se cambio da somma a media resta salvata
   time: string;
 
+  //varibile contente la scelta del sensore dell'utente
+  sensorsSelect: string;
+
   //stringa sul nome della macchina per la richiesta api
   apiMachine: string;
 
@@ -350,7 +353,7 @@ export class SinglemachinePage {
 
 
   createCircle(){
-    //this.Subtitle = (percent: number) : string => { return percent + " %"}
+    this.Subtitle = (percent: number) : string => { return percent + " %"}
   }
 
   getMachine(machine){
@@ -363,10 +366,10 @@ export class SinglemachinePage {
             this.amperometro = data[0].amperometro;
             this.umidita = data[0].umidita;
             this.ventilatore = data[0].ventilatore;
-            console.log(data[0].umidita);
-            this.calcPercent();
 
+            this.calcPercent();
             this.initialvarGraphs();
+
             for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
@@ -378,9 +381,10 @@ export class SinglemachinePage {
             this.amperometro = data[0].amperometro;
             this.umidita = data[0].umidita;
             this.ventilatore = data[0].ventilatore;
-            this.calcPercent();
 
+            this.calcPercent();
             this.initialvarGraphs();
+
             for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
@@ -392,9 +396,10 @@ export class SinglemachinePage {
             this.amperometro = data[0].amperometro;
             this.umidita = data[0].umidita;
             this.ventilatore = data[0].ventilatore;
-            this.calcPercent();
 
+            this.calcPercent();
             this.initialvarGraphs();
+
             for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
@@ -404,9 +409,10 @@ export class SinglemachinePage {
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.umidita = data[0].umidita;
-            this.calcPercent();
 
+            this.calcPercent();
             this.initialvarGraphs();
+
             for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
@@ -416,9 +422,10 @@ export class SinglemachinePage {
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.umidita = data[0].umidita;
-            this.calcPercent();
 
+            this.calcPercent();
             this.initialvarGraphs();
+
             for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].umidita);
@@ -427,9 +434,10 @@ export class SinglemachinePage {
           }else if(machine == "Motore uno"){
             this.rpm = data[0].rpm;
             this.timeData = data[0].time;
-            this.calcPercent();
 
+            this.calcPercent();
             this.initialvarGraphs();
+
             for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].rpm);
@@ -438,9 +446,10 @@ export class SinglemachinePage {
           }else if(machine == "Motore due"){
             this.rpm = data[0].rpm;
             this.timeData = data[0].time;
-            this.calcPercent();
 
+            this.calcPercent();
             this.initialvarGraphs();
+
             for(let i=0; i<data.length; i++){
               // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
               this.lineChartData[0].data.push(data[i].rpm);
@@ -484,7 +493,22 @@ export class SinglemachinePage {
 
   updatePercentMeasure(){
     //variabile che cambia in base al passaggio da un sensore all'altro
-    this.percentMeasure = this.umidita.toFixed(2);
+    switch (this.sensorsSelect) {
+      case "umidita":
+        this.percentMeasure = this.umidita.toFixed(2);
+
+      case "temperatura":
+        this.percentMeasure = this.temperature.toFixed(2);
+
+      case "ventilatore":
+        this.percentMeasure = this.ventilatore.toFixed(2);
+
+      case "rpm":
+        this.percentMeasure = this.rpm.toFixed(2);
+
+      case "amperometro":
+        this.percentMeasure = this.amperometro.toFixed(2);
+    }
   }
 
 
