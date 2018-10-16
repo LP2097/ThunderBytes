@@ -11,8 +11,11 @@ import {SinglemachinePage} from "../singlemachine/singlemachine";
 })
 export class MachinePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
 
+  list: number;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
+    this.list=0;
   }
 
   data;
@@ -28,6 +31,24 @@ export class MachinePage {
     })
 
 
+  }
+
+  onChange(list){
+    switch (list){
+      case 0:
+        this.list=0;
+        break;
+      case 1:
+        this.list=1;
+        break;
+      case 2:
+        this.list=2;
+        break;
+      case 3:
+        this.list=3;
+        break;
+
+    }
   }
 
 }

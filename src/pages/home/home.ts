@@ -23,7 +23,7 @@ var radius;
 // --------------------------- End variabili grafico sensori ---------------------------
 
 var z = 0;                  // variabile per calcolare la corrente dell'intero impianto
-var ip = "localhost";
+var ip = "192.168.101.64";
 
 @Component({
   selector: 'page-home',
@@ -143,6 +143,7 @@ export class HomePage {
   * le funzioni per disegnare il grafico delle macchine*/
   async ionViewDidEnter() {
     this.initSvg();
+
     this.data = await this.getData();
 
   }
