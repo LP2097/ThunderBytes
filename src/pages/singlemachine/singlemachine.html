@@ -19,6 +19,7 @@
     </ion-refresher-content>
   </ion-refresher>
 
+
   <ion-segment [(ngModel)]="time" color="primary" style="margin-top: 2%;" (ionChange)="segmentChangedTime($event)">
     <ion-segment-button value="minuti">
       10 minuti
@@ -30,6 +31,15 @@
         1 giorno
       </ion-segment-button>
   </ion-segment>
+
+  <!--sistemare la grafica-->
+  <ion-item>
+    <ion-label>Sensori: </ion-label>
+    <ion-select [(ngModel)]="list" (ionChange)="onChange($event)">
+      <ion-option value="{{this.firstSensor}}" checked="true">{{this.firstSensor}}</ion-option>
+      <ion-option *ngFor="let item of listSensors" value="{{item}}">{{item}}</ion-option>
+    </ion-select>
+  </ion-item>
 
   <div id="consumationFR">
     <p id="textconsumationFR">Consumo di acqua {{this.timeSelect}}</p>
@@ -91,4 +101,5 @@
       </ion-segment-button>
     </ion-segment>
   </div>
+
 </ion-content>

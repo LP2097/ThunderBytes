@@ -66,7 +66,7 @@ var config = {
     JustgageModule,
     ChartsModule,
     GaugeModule.forRoot(),
-    NgCircleProgressModule.forRoot({})
+    NgCircleProgressModule.forRoot({ })
 
   ],
   bootstrap: [IonicApp],

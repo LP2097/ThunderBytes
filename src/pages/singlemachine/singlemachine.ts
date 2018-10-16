@@ -12,6 +12,10 @@ import {influxData} from "../../app/models/InfluxData";
 })
 export class SinglemachinePage {
 
+  listSensors:Array<string> = [];
+  firstSensor: string;
+  list: string;
+
   //variabili grafico a linee
   lineChartData:Array<any> = [{data: []}];
   lineChartLabels:Array<any> = [];
@@ -47,9 +51,9 @@ export class SinglemachinePage {
     }
   ];
 
-  titleGraphs: string = "\uf043";
-  Subtitle: string;
-  percentMeasure: string = "20";
+  titleGraphs: string;
+  Subtitle;
+  percentMeasure: string;
   nameMachine: string;
   name;
   timeSelect: string;
@@ -85,6 +89,33 @@ export class SinglemachinePage {
     this.nameMachine = navParams.get('machine');
   }
 
+  onChange(list){
+
+    if(list == "umidita"){
+      this.titleGraphs = "\uf043";
+      this.sensorsSelect = "umidita";
+    }else if(list == "temperatura"){
+      this.titleGraphs = "\uf2c7";
+      this.sensorsSelect = "temperatura";
+    }else if(list == "ventilatore"){
+      this.titleGraphs = "\u09e9";
+      this.sensorsSelect = "ventilatore";
+    }else if(list == "rpm"){
+      this.titleGraphs = "\u07f7";
+      this.sensorsSelect = "rpm";
+    }else if(list == "amperometro"){
+      this.titleGraphs = "\u2b33";
+      this.sensorsSelect = "amperometro";
+    }
+
+    if(this.val == "somma"){
+      this.sumData();
+    }
+    else if(this.val == "media")
+      this.mediaData();
+  }
+
+
   //refresh dei dati controlla se era su somma o media ed esegue il refresh
   doRefresh(refresher){
     if(this.val == "somma")
@@ -99,25 +130,59 @@ export class SinglemachinePage {
   //all'avvio della pagina nasconde il grafico con relativi bottoni e scritte
   ionViewDidLoad(){
 
-      if(this.nameMachine == "FornoRiscaldamento"){
-      this.nameMachine = "Forno riscaldamento";
+    this.val = "somma";
+
+    if(this.nameMachine == "FornoRiscaldamento"){
+        this.nameMachine = "Forno riscaldamento";
+        this.list = "umidita";
+        this.firstSensor = "umidita";
+        this.sensorsSelect = "umidita";
+        this.titleGraphs = "\uf043";
     }else if(this.nameMachine == "FornoRaffredamento"){
       this.nameMachine = "Forno raffredamento";
+      this.list = "umidita";
+      this.firstSensor = "umidita";
+      this.sensorsSelect = "umidita";
+      this.titleGraphs = "\uf043";
     }else if(this.nameMachine == "FornoCottura"){
       this.nameMachine = "Forno cottura";
+      this.list = "umidita";
+      this.firstSensor = "umidita";
+      this.sensorsSelect = "umidita";
+      this.titleGraphs = "\uf043";
     }else if(this.nameMachine == "vPrimaMano"){
       this.nameMachine = "Verniciatura Prima Mano";
+      this.list = "umidita";
+      this.firstSensor = "umidita";
+      this.sensorsSelect = "umidita";
+      this.titleGraphs = "\uf043";
     }else if(this.nameMachine == "vSeccondaMano"){
       this.nameMachine = "Verniciatura Secconda Mano";
+      this.list = "umidita";
+      this.firstSensor = "umidita";
+      this.sensorsSelect = "umidita";
+      this.titleGraphs = "\uf043";
     }else if(this.nameMachine == "motoreUno"){
       this.nameMachine = "Motore uno";
+      this.list = "rpm";
+      this.firstSensor = "rpm";
+      this.sensorsSelect = "rpm";
+      this.titleGraphs = "\u07f7";
     }else if(this.nameMachine == "motoreDue") {
       this.nameMachine = "Motore due";
+      this.list = "rpm";
+      this.firstSensor = "rpm";
+      this.sensorsSelect = "rpm";
+      this.titleGraphs = "\u07f7";
     }
 
     //di default seleziono i minuti e mostro i grafici
     this.time = "minuti";
-    this.sumData()
+
+    if(this.val == "somma")
+      this.sumData();
+    else if(this.val == "media")
+      this.mediaData();
 
   }
 
@@ -131,6 +196,12 @@ export class SinglemachinePage {
   initialvarGraphs(){
     this.lineChartData = [{data: []}];
     this.lineChartLabels.length = null;
+    this.listSensors.length = null;
+    delete this.umidita;
+    delete this.temperature;
+    delete this.ventilatore;
+    delete this.rpm;
+    delete this.amperometro;
   }
 
 
@@ -184,6 +255,7 @@ export class SinglemachinePage {
       }
     }else if(this.time == "minuti"){
       this.timeSelect = "nell'ultimi dieci minuti";
+
       switch (this.nameMachine) {
         case "Forno riscaldamento":
           this.apiMachine = "sumFornoRiscaldamentoUltimiMinuti";
@@ -353,14 +425,17 @@ export class SinglemachinePage {
 
 
   createCircle(){
-    this.Subtitle = (percent: number) : string => { return percent + " %"}
+    this.Subtitle = (percent: number) : string => {return percent + " %"}
   }
 
   getMachine(machine){
-     this.http.get<influxData[]>("http://localhost:5000/" + this.apiMachine) //equivalente del metodo get di ajax
+    console.log(this.apiMachine)
+     this.http.get<influxData[]>("http://192.168.101.64:5000/" + this.apiMachine) //equivalente del metodo get di ajax
        .timeout(3000)
        .subscribe(data =>{
           if(machine == "Forno riscaldamento"){
+            this.initialvarGraphs();
+
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.amperometro = data[0].amperometro;
@@ -368,14 +443,26 @@ export class SinglemachinePage {
             this.ventilatore = data[0].ventilatore;
 
             this.calcPercent();
-            this.initialvarGraphs();
+
+            this.listSensors.push("temperatura", "amperometro", "ventilatore");
 
             for(let i=0; i<data.length; i++){
-              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
-              this.lineChartData[0].data.push(data[i].umidita);
+              switch(this.sensorsSelect){
+                case "umidita":
+                  this.lineChartData[0].data.push(data[i].umidita);
+                case "temperatura":
+                  this.lineChartData[0].data.push(data[i].temperatura);
+                case "amperometro":
+                  this.lineChartData[0].data.push(data[i].amperometro);
+                case "ventilatore":
+                  this.lineChartData[0].data.push(data[i].ventilatore);
+              }
+
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
             }
           }else if(machine == "Forno raffredamento"){
+            this.initialvarGraphs();
+
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.amperometro = data[0].amperometro;
@@ -383,14 +470,26 @@ export class SinglemachinePage {
             this.ventilatore = data[0].ventilatore;
 
             this.calcPercent();
-            this.initialvarGraphs();
+
+            this.listSensors.push("temperatura", "amperometro", "ventilatore");
 
             for(let i=0; i<data.length; i++){
-              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
-              this.lineChartData[0].data.push(data[i].umidita);
+              switch(this.sensorsSelect){
+                case "umidita":
+                  this.lineChartData[0].data.push(data[i].umidita);
+                case "temperatura":
+                  this.lineChartData[0].data.push(data[i].temperatura);
+                case "amperometro":
+                  this.lineChartData[0].data.push(data[i].amperometro);
+                case "ventilatore":
+                  this.lineChartData[0].data.push(data[i].ventilatore);
+              }
+
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
             }
           }else if(machine == "Forno cottura"){
+            this.initialvarGraphs();
+
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.amperometro = data[0].amperometro;
@@ -398,65 +497,99 @@ export class SinglemachinePage {
             this.ventilatore = data[0].ventilatore;
 
             this.calcPercent();
-            this.initialvarGraphs();
+
+            this.listSensors.push("temperatura", "amperometro", "ventilatore");
 
             for(let i=0; i<data.length; i++){
-              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
-              this.lineChartData[0].data.push(data[i].umidita);
+              switch(this.sensorsSelect){
+                case "umidita":
+                  this.lineChartData[0].data.push(data[i].umidita);
+                case "temperatura":
+                  this.lineChartData[0].data.push(data[i].temperatura);
+                case "amperometro":
+                  this.lineChartData[0].data.push(data[i].amperometro);
+                case "ventilatore":
+                  this.lineChartData[0].data.push(data[i].ventilatore);
+              }
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
             }
           }else if(machine == "Verniciatura Prima Mano"){
+            this.initialvarGraphs();
+
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.umidita = data[0].umidita;
 
             this.calcPercent();
-            this.initialvarGraphs();
+
+            this.listSensors.push("temperatura");
 
             for(let i=0; i<data.length; i++){
-              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
-              this.lineChartData[0].data.push(data[i].umidita);
+              switch(this.sensorsSelect){
+                case "umidita":
+                  this.lineChartData[0].data.push(data[i].umidita);
+                case "temperatura":
+                  this.lineChartData[0].data.push(data[i].temperatura);
+              }
+
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
             }
           }else if(machine == "Verniciatura Secconda Mano"){
+            this.initialvarGraphs();
+
             this.temperature = data[0].temperatura;
             this.timeData = data[0].time;
             this.umidita = data[0].umidita;
 
             this.calcPercent();
-            this.initialvarGraphs();
+
+            this.listSensors.push("temperatura");
 
             for(let i=0; i<data.length; i++){
-              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
-              this.lineChartData[0].data.push(data[i].umidita);
+              switch(this.sensorsSelect){
+                case "umidita":
+                  this.lineChartData[0].data.push(data[i].umidita);
+                case "temperatura":
+                  this.lineChartData[0].data.push(data[i].temperatura);
+              }
+
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
             }
           }else if(machine == "Motore uno"){
+            this.initialvarGraphs();
+
             this.rpm = data[0].rpm;
             this.timeData = data[0].time;
 
+            console.log(this.rpm)
             this.calcPercent();
-            this.initialvarGraphs();
+
 
             for(let i=0; i<data.length; i++){
-              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
-              this.lineChartData[0].data.push(data[i].rpm);
+              switch(this.sensorsSelect){
+                case "rpm":
+                  this.lineChartData[0].data.push(data[i].rpm);
+              }
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
             }
           }else if(machine == "Motore due"){
+            this.initialvarGraphs();
+
             this.rpm = data[0].rpm;
             this.timeData = data[0].time;
 
             this.calcPercent();
-            this.initialvarGraphs();
 
             for(let i=0; i<data.length; i++){
-              // TODO creare uno switch per ogni sezione in base a dove mi trovo nei sensori
-              this.lineChartData[0].data.push(data[i].rpm);
+              switch(this.sensorsSelect){
+                case "rpm":
+                  this.lineChartData[0].data.push(data[i].rpm);
+              }
               this.lineChartLabels.push(moment(data[i].time).format('h:mm'));
             }
+
           }
-          console.log(this.umidita);
+           console.log("avvio funzioni");
            this.updatePercentMeasure();
            this.createCircle();
          },
@@ -468,47 +601,45 @@ export class SinglemachinePage {
    calcPercent(){
     switch(this.time){
      case "minuti":
-         this.umidita = (this.umidita/7000)*100;
-         this.temperature = (this.temperature/7000)*100;
-         this.ventilatore = (this.ventilatore/70000)*100;
-         this.rpm = (this.rpm/70000)*100;
-         this.amperometro = (this.amperometro/11200)*100;
+         this.umidita = (this.umidita/12000)*100;
+         this.temperature = (this.temperature/12000)*100;
+         this.ventilatore = (this.ventilatore/1200000)*100;
+         this.rpm = (this.rpm/1200000)*100;
+         this.amperometro = (this.amperometro/19200)*100;
          break;
      case "ora":
-        this.umidita = (this.umidita/42000)*100;
-        this.temperature = (this.temperature/42000)*100;
-        this.ventilatore = (this.ventilatore/4200000)*100;
-        this.rpm = (this.rpm/4200000)*100;
-        this.amperometro = (this.amperometro/67200)*100;
+        this.umidita = (this.umidita/72000)*100;
+        this.temperature = (this.temperature/72000)*100;
+        this.ventilatore = (this.ventilatore/72000000)*100;
+        this.rpm = (this.rpm/72000000)*100;
+        this.amperometro = (this.amperometro/115200)*100;
         break;
      case "giorno":
-       this.umidita = (this.umidita/1008000)*100;
-       this.temperature = (this.temperature/1008000)*100;
-       this.ventilatore = (this.ventilatore/100800000)*100;
-       this.rpm = (this.rpm/100800000)*100;
-       this.amperometro = (this.amperometro/1612800)*100;
+       this.umidita = (this.umidita/1728000)*100;
+       this.temperature = (this.temperature/1728000)*100;
+       this.ventilatore = (this.ventilatore/1728000000)*100;
+       this.rpm = (this.rpm/1728000000)*100;
+       this.amperometro = (this.amperometro/2764800)*100;
        break;
      }
    }
 
   updatePercentMeasure(){
     //variabile che cambia in base al passaggio da un sensore all'altro
-    switch (this.sensorsSelect) {
-      case "umidita":
-        this.percentMeasure = this.umidita.toFixed(2);
 
-      case "temperatura":
-        this.percentMeasure = this.temperature.toFixed(2);
+    console.log("updatePercent");
+    if(this.sensorsSelect == "rpm")
+      this.percentMeasure = this.rpm.toFixed(2);
+    else if(this.sensorsSelect == "umidita")
+      this.percentMeasure = this.umidita.toFixed(2);
+    else if(this.sensorsSelect == "temperatura")
+      this.percentMeasure = this.temperature.toFixed(2);
+    else if(this.sensorsSelect == "ventilatore")
+      this.percentMeasure = this.ventilatore.toFixed(2);
+    else if(this.sensorsSelect == "amperometro")
+      this.percentMeasure = this.amperometro.toFixed(2);
 
-      case "ventilatore":
-        this.percentMeasure = this.ventilatore.toFixed(2);
-
-      case "rpm":
-        this.percentMeasure = this.rpm.toFixed(2);
-
-      case "amperometro":
-        this.percentMeasure = this.amperometro.toFixed(2);
-    }
+    console.log("rpm percent: " + this.percentMeasure);
   }
 
 
