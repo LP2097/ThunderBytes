@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
 import {AlertController, NavController, Platform} from 'ionic-angular';
-import { transition } from 'd3-transition';
 import {HttpClient} from '@angular/common/http';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
 import * as d3Shape from "d3-shape";
-import * as d3Interpolate from "d3-interpolate";
-import * as d3Transition from 'd3-transition';
 import * as $ from 'jquery'
 import {LocalNotifications} from "@ionic-native/local-notifications";
 import {Observable} from "rxjs/Observable";
@@ -15,7 +12,6 @@ import {influxData} from "../../app/models/InfluxData";
 import * as _ from 'underscore';
 
 // --------------------------- Start variabili grafico sensori ---------------------------
-//var x = Chart;
 var boolCreateGraphsS = false;
 var width;
 var height;
@@ -23,7 +19,7 @@ var radius;
 // --------------------------- End variabili grafico sensori ---------------------------
 
 var z = 0;                  // variabile per calcolare la corrente dell'intero impianto
-var ip = "192.168.101.64";
+var ip = "172.20.10.2";
 
 @Component({
   selector: 'page-home',
@@ -59,7 +55,6 @@ export class HomePage {
   }
 
   correnteImpianto: number = 0;
-  currentSensors: string;
 
   margin = {top: 30, right: 20, bottom: 10, left: 20};
   width: number;
@@ -90,7 +85,6 @@ export class HomePage {
       .timeInterval()
       .flatMap(() => this.getAllInfluxData())
       .subscribe(data => {
-        //console.log("log: "+this.retrivedData);
         let dataAnalisys = _.max(this.retrivedData, function (item) {
           return item.temperatura;
         });
@@ -141,7 +135,7 @@ export class HomePage {
 
   /*funzione che si avvia automaticamente dopo il costruttore e avvio
   * le funzioni per disegnare il grafico delle macchine*/
-  async ionViewDidEnter() {
+  async ionViewDidLoad() {
     this.initSvg();
 
     this.data = await this.getData();
