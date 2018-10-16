@@ -19,8 +19,15 @@
     </ion-refresher-content>
   </ion-refresher>
 
+  <ion-item>
+    <ion-label>Sensori: </ion-label>
+    <ion-select [(ngModel)]="list" (ionChange)="onChange($event)">
+      <ion-option value="{{this.firstSensor}}" checked="true">{{this.firstSensor}}</ion-option>
+      <ion-option *ngFor="let item of listSensors" value="{{item}}">{{item}}</ion-option>
+    </ion-select>
+  </ion-item>
 
-  <ion-segment [(ngModel)]="time" color="primary" style="margin-top: 2%;" (ionChange)="segmentChangedTime($event)">
+  <ion-segment class="selectTime" [(ngModel)]="time" color="primary" style="margin-top: 2%;" (ionChange)="segmentChangedTime($event)">
     <ion-segment-button value="minuti">
       10 minuti
     </ion-segment-button>
@@ -32,17 +39,9 @@
       </ion-segment-button>
   </ion-segment>
 
-  <!--sistemare la grafica-->
-  <ion-item>
-    <ion-label>Sensori: </ion-label>
-    <ion-select [(ngModel)]="list" (ionChange)="onChange($event)">
-      <ion-option value="{{this.firstSensor}}" checked="true">{{this.firstSensor}}</ion-option>
-      <ion-option *ngFor="let item of listSensors" value="{{item}}">{{item}}</ion-option>
-    </ion-select>
-  </ion-item>
 
   <div id="consumationFR">
-    <p id="textconsumationFR">Consumo di acqua {{this.timeSelect}}</p>
+    <p id="textconsumationFR">Consumo massimo:  {{this.maxVal}}</p>
   </div>
 
   <ion-slides class="slide" pager="true">
@@ -72,6 +71,7 @@
                        [responsive]= true
       ></circle-progress>
     </ion-slide>
+
     <ion-slide>
       <div class="graphs">
         <div class="col-md-6">

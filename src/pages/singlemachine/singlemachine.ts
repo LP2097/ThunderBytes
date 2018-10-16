@@ -65,6 +65,7 @@ export class SinglemachinePage {
   temperature: any;
   timeData: any;
   rpm: any;
+  maxVal: number;
 
   //primo API mostra la media e la seleziono con questa variabile
   val: string = "somma";
@@ -156,7 +157,7 @@ export class SinglemachinePage {
       this.firstSensor = "umidita";
       this.sensorsSelect = "umidita";
       this.titleGraphs = "\uf043";
-    }else if(this.nameMachine == "vSeccondaMano"){
+    }else if(this.nameMachine == "vSecondaMano"){
       this.nameMachine = "Verniciatura Secconda Mano";
       this.list = "umidita";
       this.firstSensor = "umidita";
@@ -255,6 +256,7 @@ export class SinglemachinePage {
       }
     }else if(this.time == "minuti"){
       this.timeSelect = "nell'ultimi dieci minuti";
+      console.log("Nome della macchina: " + this.nameMachine)
 
       switch (this.nameMachine) {
         case "Forno riscaldamento":
@@ -425,11 +427,10 @@ export class SinglemachinePage {
 
 
   createCircle(){
-    this.Subtitle = (percent: number) : string => {return percent + " %"}
+    this.Subtitle = (percent: number) : string => {return percent + " %"};
   }
 
   getMachine(machine){
-    console.log(this.apiMachine)
      this.http.get<influxData[]>("http://172.20.10.2:5000/" + this.apiMachine) //equivalente del metodo get di ajax
        .timeout(3000)
        .subscribe(data =>{
@@ -599,6 +600,7 @@ export class SinglemachinePage {
    }
 
    calcPercent(){
+    // salvare nella variabile maxVAl il valore massimo che viene utilizzato per il calcolo
     switch(this.time){
      case "minuti":
          this.umidita = (this.umidita/12000)*100;
@@ -638,8 +640,6 @@ export class SinglemachinePage {
       this.percentMeasure = this.ventilatore.toFixed(2);
     else if(this.sensorsSelect == "amperometro")
       this.percentMeasure = this.amperometro.toFixed(2);
-
-    console.log("rpm percent: " + this.percentMeasure);
   }
 
 
