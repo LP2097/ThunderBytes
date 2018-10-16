@@ -2,13 +2,6 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import {SplashScreen} from "@ionic-native/splash-screen";
 
-/**
- * Generated class for the SplashPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-splash',
@@ -19,15 +12,11 @@ export class SplashPage {
   showSplash = true;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public splashScreen: SplashScreen, public viewCtrl: ViewController) {
-  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public splashScreen: SplashScreen, public viewCtrl: ViewController) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SplashPage');
-  }
-
-  ionViewDidEnter() {
-
+  // funzione si avvia automaticamente mostra prima l'immagine e a seguire lo splashscrenn dell'azienda [BRAFORD]
+  ionViewDidEnter()
+  {
     this.splashScreen.hide();
 
     setTimeout(() => {

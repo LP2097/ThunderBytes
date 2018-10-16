@@ -4,6 +4,7 @@ import {Provider} from "../../providers/provider/provider";
 import {HomePage} from "../home/home";
 import {User} from "../../app/models/User";
 import {AngularFireAuth} from "@angular/fire/auth";
+import {TabsPage} from "../tabs/tabs";
 
 
 /**
@@ -40,7 +41,7 @@ export class LoginPage {
 
   async googleLogin(){
      await this.provider.login();
-    this.navCrtl.setRoot(HomePage,{
+    this.navCrtl.setRoot(TabsPage,{
       'user': this.userInfo
     });
   }
@@ -77,7 +78,7 @@ export class LoginPage {
   }
 
   navToHomePage(){
-    this.navCrtl.setRoot(HomePage, {
+    this.navCrtl.setRoot(TabsPage, {
       'user': this.userInfo
     });
   }

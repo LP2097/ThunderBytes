@@ -430,7 +430,7 @@ export class SinglemachinePage {
 
   getMachine(machine){
     console.log(this.apiMachine)
-     this.http.get<influxData[]>("http://192.168.101.64:5000/" + this.apiMachine) //equivalente del metodo get di ajax
+     this.http.get<influxData[]>("http://172.20.10.2:5000/" + this.apiMachine) //equivalente del metodo get di ajax
        .timeout(3000)
        .subscribe(data =>{
           if(machine == "Forno riscaldamento"){

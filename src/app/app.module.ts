@@ -28,8 +28,7 @@ import {SinglemachinePage} from "../pages/singlemachine/singlemachine";
 import {SplashPage} from "../pages/splash/splash";
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import {LocalNotifications} from "@ionic-native/local-notifications";
-
-
+import {TabsPage} from "../pages/tabs/tabs";
 
 
 var config = {
@@ -50,7 +49,8 @@ var config = {
     SettingsPage,
     MachinePage,
     SinglemachinePage,
-    SplashPage
+    SplashPage,
+    TabsPage
 
 
   ],
@@ -78,7 +78,8 @@ var config = {
     SettingsPage,
     MachinePage,
     SinglemachinePage,
-    SplashPage
+    SplashPage,
+    TabsPage
 
 
   ],
