@@ -1,3 +1,4 @@
+
 export interface influxData {
   time :Date,
   amperometro: number,

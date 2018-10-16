@@ -13,13 +13,10 @@ import * as _ from 'underscore';
 
 // --------------------------- Start variabili grafico sensori ---------------------------
 var boolCreateGraphsS = false;
-var width;
-var height;
-var radius;
 // --------------------------- End variabili grafico sensori ---------------------------
 
 var z = 0;                  // variabile per calcolare la corrente dell'intero impianto
-var ip = "172.20.10.2";
+var ip = "192.168.1.125";
 
 @Component({
   selector: 'page-home',
@@ -101,11 +98,6 @@ export class HomePage {
     this.width = 900 - this.margin.left - this.margin.right ;
     this.height = 500 - this.margin.top - this.margin.bottom;
     this.radius = Math.min(this.width, this.height) / 2;
-
-    /*utilizzo la stessa grandezza del grafico macchine per il grafico dei sensori*/
-    width = this.width;
-    height = this.height;
-    radius = this.radius;
 
     //INIZIO NOTIFICHE
     this.plt.ready().then((rdy)=>{
@@ -291,13 +283,14 @@ export class HomePage {
   w:number = 550;
   h:number = 140;
 
-
+  //funzione per disegnare il menu
   drawLegend(){
     this.svgLegned4 = d3.select(".legend4").append("svg")
       .attr("width", this.width)
       .attr("height", this.h - 50)
       .attr("class", "shadow");
 
+    // credo il menu
     let legend4 = this.svgLegned4.selectAll('.legends4')
       .data(this.color.domain())
       .enter().append('g')
@@ -311,13 +304,14 @@ export class HomePage {
             this.dataL = 0;
             this.newdatah += 25;
           }
-          this.newdataL = this.dataL
-          this.dataL += d.length + this.offset
+          this.newdataL = this.dataL;
+          this.dataL += d.length + this.offset;
           return "translate(" + (this.newdataL) + ","+ this.newdatah +")"
 
         }
       });
 
+    // menu prima del pgrafico rappresentante il nome delle macchine relative hai colori
     legend4.append('rect')
       .attr("x", 0)
       .attr("y", 0)
