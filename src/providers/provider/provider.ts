@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {GooglePlus} from "@ionic-native/google-plus";
+import {AlertController} from "ionic-angular";
 
 @Injectable()
 export class Provider {
 
-  constructor(public http: HttpClient, private googlePlus: GooglePlus) {
+  constructor(public http: HttpClient, private googlePlus: GooglePlus, private alertCtrl: AlertController) {
     console.log('Hello Provider Provider');
   }
 
@@ -17,6 +18,8 @@ export class Provider {
   givenName=null;
   imageUrl=null;
   isLoggedIn=null;
+  autentication;
+
 
   async login(): Promise<any> {
     await this.googlePlus.login({})
@@ -33,7 +36,24 @@ export class Provider {
         this.isLoggedIn = true;
         return res;
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+          this.errorLogin();
+          this.isLoggedIn=false;
+        }
+      );
+  }
+
+  errorLogin() {
+    let alert = this.alertCtrl.create({
+      title: 'Errore',
+      message: 'Email o Password errati ',
+      buttons: [
+        {
+          text: 'Ok',
+        }
+      ]
+    });
+    alert.present();
   }
 
 
@@ -49,7 +69,6 @@ export class Provider {
         this.userId = "";
         this.imageUrl = "";
         this.user="";
-
         this.isLoggedIn = false;
       })
       .catch(err => console.error(err));

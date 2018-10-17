@@ -13,67 +13,77 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-grid>
+<ion-content>
+  <ion-card class="card">
 
-    <ion-row align-items-center>
-      <ion-col >
-        <ion-avatar>
-           <img [src]="user.imageUrl">
-        </ion-avatar>
+    <ion-card-header>
+      USER
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+
+
+        <ion-row align-items-center>
+          <ion-col >
+            <ion-avatar *ngIf="user.imageUrl">
+              <img class="circle-pic" [src]="user.imageUrl">
+            </ion-avatar>
+          </ion-col>
+        </ion-row>
+        <ion-row class="photo">
+          <ion-col>
+            Nome:
+          </ion-col>
+          <ion-col *ngIf="user.givenName">
+            {{user.givenName }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="details">
+          <ion-col>
+            Cognome:
+          </ion-col>
+          <ion-col *ngIf="user.familyName">
+            {{user.familyName }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="details">
+          <ion-col >
+            Email:
+          </ion-col >
+          <ion-col>
+            {{user.email }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="logout">
+          <ion-col></ion-col>
+          <ion-col>
+            <button ion-button color="danger" round>
+              LOGOUT <i class="fa fa-sign-out buttonLogout" aria-hidden="true"></i>
+            </button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-grid class="description">
+    <ion-row >
+      <ion-col>
+        Azienda:
+      </ion-col>
+      <ion-col>
+        Thunder Bytes <i class="fa fa-bolt " aria-hidden="true"></i>
       </ion-col>
     </ion-row>
-    <ion-row class="photo">
+    <ion-row>
       <ion-col>
-        Nome:
+        Versione App:
       </ion-col>
-      <ion-col >
-        {{user.givenName }}
-      </ion-col>
-    </ion-row>
-    <ion-row class="details">
-      <ion-col>
-        Cognome:
-      </ion-col>
-      <ion-col >
-        {{user.familyName }}
-      </ion-col>
-    </ion-row>
-    <ion-row class="details">
-      <ion-col >
-        Email:
-      </ion-col >
-      <ion-col>
-        {{user.email }}
+      <ion-col *ngIf="user.familyName">
+        V 0.0.1
       </ion-col>
     </ion-row>
   </ion-grid>
-
-
-
-  <div class="container">
-    <div id="g1" class="gauge"></div>
-    <a href="#" id="g1_refresh">Random Refresh</a>
-  </div>
-  <script src="../raphael-2.1.4.min.js"></script>
-  <script src="../justgage.js"></script>
-  <script>
-    var g1;
-    document.addEventListener("DOMContentLoaded", function(event) {
-      g1 = new JustGage({
-        id: "g1",
-        value: 72,
-        min: 0,
-        max: 100,
-        donut: true,
-        gaugeWidthScale: 0.6,
-        counter: true,
-        hideInnerShadow: true
-      });
-
-      document.getElementById('g1_refresh').addEventListener('click', function() {
-        g1.refresh(getRandomInt(0, 100));
-      });
-    });
-  </script>
 </ion-content>

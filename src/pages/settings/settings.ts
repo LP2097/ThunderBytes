@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {Provider} from "../../providers/provider/provider";
+import {UserInfo} from "../../app/models/UserInfo";
+import {LoginPage} from "../login/login";
 
 /**
  * Generated class for the SettingsPage page.
@@ -16,22 +18,43 @@ import {Provider} from "../../providers/provider/provider";
 })
 export class SettingsPage {
 
+  autentication;
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private provider: Provider) {
+    console.log("mail"+this.provider.email);
+
     this.getUserInfo();
+
+
   }
 
-  user;
+  user:UserInfo = new UserInfo();
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
   }
 
 
+
   getUserInfo(){
-    this.user = this.provider.user;
-    console.log(JSON.stringify(this.user));
+    let autentication= this.provider.autentication;
+    console.log("autenticazione: "+autentication );
+    if(autentication=='google')
+      this.user = this.provider.user;
+    else{
+      this.user.givenName="Guest";
+      this.user.imageUrl="../../assets/imgs/guest.png";
+      this.user.familyName="-";
+      console.log(this.provider.user.email)
+      this.user.email=this.provider.email;
+
+    }
+
   }
 
+  logout() {
+    this.provider.logout();
+    this.navCtrl.setRoot(LoginPage);
+  }
 }
