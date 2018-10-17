@@ -25,27 +25,11 @@ export class SinglemachinePage {
     responsive: true
   };
   lineChartColors:Array<any> = [
-    { // grey
+    {
       backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    },
-    { // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(77,83,96,1)',
-      pointBackgroundColor: 'rgba(77,83,96,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(77,83,96,1)'
-    },
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
+      borderColor: '#EAE2B7',
+      pointBackgroundColor: '#D62640',
+      pointBorderColor: '#D62640',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     }
@@ -65,6 +49,7 @@ export class SinglemachinePage {
   temperature: any;
   timeData: any;
   rpm: any;
+  maxVal: string;
 
   //primo API mostra la media e la seleziono con questa variabile
   val: string = "somma";
@@ -95,13 +80,13 @@ export class SinglemachinePage {
       this.titleGraphs = "\uf043";
       this.sensorsSelect = "umidita";
     }else if(list == "temperatura"){
-      this.titleGraphs = "\uf2c7";
+      this.titleGraphs = "C°";
       this.sensorsSelect = "temperatura";
     }else if(list == "ventilatore"){
       this.titleGraphs = "\u09e9";
       this.sensorsSelect = "ventilatore";
     }else if(list == "rpm"){
-      this.titleGraphs = "\u07f7";
+      this.titleGraphs = "\uf0e4";
       this.sensorsSelect = "rpm";
     }else if(list == "amperometro"){
       this.titleGraphs = "\u2b33";
@@ -156,7 +141,7 @@ export class SinglemachinePage {
       this.firstSensor = "umidita";
       this.sensorsSelect = "umidita";
       this.titleGraphs = "\uf043";
-    }else if(this.nameMachine == "vSeccondaMano"){
+    }else if(this.nameMachine == "vSecondaMano"){
       this.nameMachine = "Verniciatura Secconda Mano";
       this.list = "umidita";
       this.firstSensor = "umidita";
@@ -167,13 +152,13 @@ export class SinglemachinePage {
       this.list = "rpm";
       this.firstSensor = "rpm";
       this.sensorsSelect = "rpm";
-      this.titleGraphs = "\u07f7";
+      this.titleGraphs = "\uf0e4";
     }else if(this.nameMachine == "motoreDue") {
       this.nameMachine = "Motore due";
       this.list = "rpm";
       this.firstSensor = "rpm";
       this.sensorsSelect = "rpm";
-      this.titleGraphs = "\u07f7";
+      this.titleGraphs = "\uf0e4";
     }
 
     //di default seleziono i minuti e mostro i grafici
@@ -255,6 +240,7 @@ export class SinglemachinePage {
       }
     }else if(this.time == "minuti"){
       this.timeSelect = "nell'ultimi dieci minuti";
+      console.log("Nome della macchina: " + this.nameMachine)
 
       switch (this.nameMachine) {
         case "Forno riscaldamento":
@@ -425,12 +411,11 @@ export class SinglemachinePage {
 
 
   createCircle(){
-    this.Subtitle = (percent: number) : string => {return percent + " %"}
+    this.Subtitle = (percent: number) : string => {return percent + " %"};
   }
 
   getMachine(machine){
-    console.log(this.apiMachine)
-     this.http.get<influxData[]>("http://172.20.10.2:5000/" + this.apiMachine) //equivalente del metodo get di ajax
+     this.http.get<influxData[]>("http://192.168.1.125:5000/" + this.apiMachine) //equivalente del metodo get di ajax
        .timeout(3000)
        .subscribe(data =>{
           if(machine == "Forno riscaldamento"){
@@ -599,6 +584,8 @@ export class SinglemachinePage {
    }
 
    calcPercent(){
+    this.maxValSelect();
+    // salvare nella variabile maxVAl il valore massimo che viene utilizzato per il calcolo
     switch(this.time){
      case "minuti":
          this.umidita = (this.umidita/12000)*100;
@@ -624,6 +611,52 @@ export class SinglemachinePage {
      }
    }
 
+   //funzione per salvare nella variabile il valore massimo del sensore
+   maxValSelect(){
+    switch (this.time) {
+      case "minuti":
+        if(this.sensorsSelect == "umidita"){
+          this.maxVal = "12.000 Kg";
+        }else if(this.sensorsSelect == "temperatura"){
+          this.maxVal = "12.000 °C";
+        }else if(this.sensorsSelect == "ventilatore"){
+          this.maxVal = "1.200.000 rpm";
+        }else if(this.sensorsSelect == "rpm"){
+          this.maxVal = "1.200.000 rpm";
+        }else if(this.sensorsSelect == "amperometro"){
+          this.maxVal = "19.200 A";
+        }
+        break;
+      case "ora":
+        if(this.sensorsSelect == "umidita"){
+          this.maxVal = "72.000 Kg";
+        }else if(this.sensorsSelect == "temperatura"){
+          this.maxVal = "72.000 °C";
+        }else if(this.sensorsSelect == "ventilatore"){
+          this.maxVal = "72.000.000 rpm";
+        }else if(this.sensorsSelect == "rpm"){
+          this.maxVal = "72.000.000 rpm";
+        }else if(this.sensorsSelect == "amperometro"){
+          this.maxVal = "115.200 A";
+        }
+        break;
+      case "giorno":
+        if(this.sensorsSelect == "umidita"){
+          this.maxVal = "1.728.000 Kg";
+        }else if(this.sensorsSelect == "temperatura"){
+          this.maxVal = "1.728.000 °C";
+        }else if(this.sensorsSelect == "ventilatore"){
+          this.maxVal = "1.728.000.000 rpm";
+        }else if(this.sensorsSelect == "rpm"){
+          this.maxVal = "1.728.000.000 rpm";
+        }else if(this.sensorsSelect == "amperometro"){
+          this.maxVal = "2.764.800 A";
+        }
+        break;
+    }
+
+   }
+
   updatePercentMeasure(){
     //variabile che cambia in base al passaggio da un sensore all'altro
 
@@ -638,8 +671,6 @@ export class SinglemachinePage {
       this.percentMeasure = this.ventilatore.toFixed(2);
     else if(this.sensorsSelect == "amperometro")
       this.percentMeasure = this.amperometro.toFixed(2);
-
-    console.log("rpm percent: " + this.percentMeasure);
   }
 
 

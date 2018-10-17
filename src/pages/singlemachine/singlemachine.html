@@ -19,8 +19,17 @@
     </ion-refresher-content>
   </ion-refresher>
 
+  <!--Selezione sensori disponibili per il macchinario default umidita-->
+  <ion-item>
+    <ion-label>Sensori: </ion-label>
+    <ion-select [(ngModel)]="list" (ionChange)="onChange($event)">
+      <ion-option value="{{this.firstSensor}}" checked="true">{{this.firstSensor}}</ion-option>
+      <ion-option *ngFor="let item of listSensors" value="{{item}}">{{item}}</ion-option>
+    </ion-select>
+  </ion-item>
 
-  <ion-segment [(ngModel)]="time" color="primary" style="margin-top: 2%;" (ionChange)="segmentChangedTime($event)">
+  <!--selezione del tempo da visualizzare default 10 min-->
+  <ion-segment class="selectTime" [(ngModel)]="time" color="energized" style="margin-top: 2%;" (ionChange)="segmentChangedTime($event)">
     <ion-segment-button value="minuti">
       10 minuti
     </ion-segment-button>
@@ -32,19 +41,12 @@
       </ion-segment-button>
   </ion-segment>
 
-  <!--sistemare la grafica-->
-  <ion-item>
-    <ion-label>Sensori: </ion-label>
-    <ion-select [(ngModel)]="list" (ionChange)="onChange($event)">
-      <ion-option value="{{this.firstSensor}}" checked="true">{{this.firstSensor}}</ion-option>
-      <ion-option *ngFor="let item of listSensors" value="{{item}}">{{item}}</ion-option>
-    </ion-select>
-  </ion-item>
 
   <div id="consumationFR">
-    <p id="textconsumationFR">Consumo di acqua {{this.timeSelect}}</p>
+    <p id="textconsumationFR">Consumo massimo:  {{this.maxVal}}</p>
   </div>
 
+  <!--disegno grafico cerchio-->
   <ion-slides class="slide" pager="true">
     <ion-slide>
       <!--Per il titolo: utilizzo il font answer per stampare le mie icone e richiamando il loro relativo codice
@@ -55,14 +57,14 @@
                        [backgroundOpacity]= "1"
                        [backgroundStroke]= "'#000000'"
                        [backgroundPadding]= "17"
-                       [radius]= "65"
-                       [space]= -2
+                       [radius]= "50"
+                       [space]= -1
                        [outerStrokeWidth]= 2
-                       [outerStrokeColor]= "'#808080'"
-                       [innerStrokeColor]= "'#e7e8ea'"
-                       [innerStrokeWidth]= 2
-                       [titleFontSize]= 60
-                       [subtitleFontSize]= 30
+                       [outerStrokeColor]= "'#D62640'"
+                       [innerStrokeColor]= "'rgba(148,159,177,0.2)'"
+                       [innerStrokeWidth]= 1
+                       [titleFontSize]= 40
+                       [subtitleFontSize]= 20
                        [title]= this.titleGraphs
                        [subtitleFormat]= this.Subtitle
                        [animateTitle]="false"
@@ -72,11 +74,13 @@
                        [responsive]= true
       ></circle-progress>
     </ion-slide>
+
+    <!--Disegno grafico a griglia-->
     <ion-slide>
       <div class="graphs">
         <div class="col-md-6">
           <div style="display: block;">
-            <canvas baseChart width="200" height="200"
+            <canvas baseChart width="200" height="150"
                     [datasets]="lineChartData"
                     [labels]="lineChartLabels"
                     [options]="lineChartOptions"

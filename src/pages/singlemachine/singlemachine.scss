@@ -7,12 +7,13 @@
 #textconsumationFR{
   text-align: center;
   font-family: GeosansLight;
+  margin-top: 5%;
   font-size: 25px;
 }
 
 div.controlVal{
   width: 50%;
-  margin-top: 1%;
+  margin-top: 5%;
 }
 
 .gridData{
@@ -21,6 +22,12 @@ div.controlVal{
 
 .slide{
   height: 60%;
+}
+
+.selectTime{
+  width: 95%;
+  margin-left: 2.5%;
+  margin-top: 5%;
 }
 
 .tab {
