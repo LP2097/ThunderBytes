@@ -1,0 +1,89 @@
+<!--
+  Generated template for the SettingsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Settings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="card">
+
+    <ion-card-header>
+      USER
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+
+
+        <ion-row align-items-center>
+          <ion-col >
+            <ion-avatar *ngIf="user.imageUrl">
+              <img class="circle-pic" [src]="user.imageUrl">
+            </ion-avatar>
+          </ion-col>
+        </ion-row>
+        <ion-row class="photo">
+          <ion-col>
+            Nome:
+          </ion-col>
+          <ion-col *ngIf="user.givenName">
+            {{user.givenName }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="details">
+          <ion-col>
+            Cognome:
+          </ion-col>
+          <ion-col *ngIf="user.familyName">
+            {{user.familyName }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="details">
+          <ion-col >
+            Email:
+          </ion-col >
+          <ion-col>
+            {{user.email }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="logout">
+          <ion-col></ion-col>
+          <ion-col>
+            <button ion-button color="danger" round>
+              LOGOUT <i class="fa fa-sign-out buttonLogout" aria-hidden="true"></i>
+            </button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-grid class="description">
+    <ion-row >
+      <ion-col>
+        Azienda:
+      </ion-col>
+      <ion-col>
+        Thunder Bytes <i class="fa fa-bolt " aria-hidden="true"></i>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Versione App:
+      </ion-col>
+      <ion-col *ngIf="user.familyName">
+        V 0.0.1
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

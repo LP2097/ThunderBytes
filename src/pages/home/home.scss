@@ -1,10 +1,86 @@
-page-home {
-
+@font-face {
+  font-family: Cocogoose;
+  src: url(../../assets/font/Cocogoose.ttf);
 }
 
-.circle-pic{
-  width:100px;
-  height:100px;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
+@font-face {
+  font-family: GeosansLight;
+  src: url(../../assets/font/GeosansLight-Oblique.ttf);
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url(../../assets/font/Roboto-Condensed.ttf);
+}
+
+@font-face {
+  font-family: primetime;
+  src: url(../../assets/font/PRIMETIME.ttf);
+}
+
+@font-face {
+  font-family: bolt;
+  src: url(../../assets/font/bolt.ttf);
+}
+
+Ion-title{
+  font-family: primetime;
+}
+
+.consumo{
+  font-weight: 900;
+}
+
+.styleIcon{
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+/*.legend4{
+  background-color: #29384D;
+  height: 40px;
+  width: 100%;
+  margin-left: -10%;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-weight: 400;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  text-shadow: 1px 1px #06060d;
+}*/
+
+.widget {
+  margin: 0 auto;
+  width: 350px;
+  margin-top: 20px;
+  background-color: #ccc;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.4);
+}
+
+.chart-container {
+  padding: 25px;
+}
+
+.shadow {
+  -webkit-filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.5));
+}
+
+.legend4{
+  margin-top: 5%;
+  margin-left: 5%;
+}
+
+#textConsumationPlant{
+  text-align: center;
+  font-family: GeosansLight;
+  font-size: 19px;
+}
+
+.consumo{
+  font-size: 23px;
 }

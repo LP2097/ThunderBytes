@@ -1,0 +1,264 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Macchinari</ion-title>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <!--Start selezione raggruppamento macchinari-->
+  <ion-list>
+    <ion-item>
+      <ion-label class="selectMachine">Macchinari: </ion-label>
+      <ion-select #newSelect [(ngModel)]="list" (change)="onChange(list)">
+        <ion-option value="0" checked="true">Tutti</ion-option>
+        <ion-option value="1" >Verniciatura</ion-option>
+        <ion-option value="2">Forni</ion-option>
+        <ion-option value="3">Trasportatore</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+  <!--End selezione raggruppamento macchinari-->
+
+  <!--Start macchinari-->
+    <!--Verniciatura Prima mano-->
+    <ion-item *ngIf="list==1 || list==0" #machine (click)="readChart('vPrimaMano')">
+      <ion-card class="card">
+        <ion-card-header>
+          <ion-icon name='ios-brush' item-start ></ion-icon>
+          Verniciatura 1° mano
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                Loc: Edificio S
+              </ion-col>
+              <ion-col>
+                Data Insatallazione: 20/10/2015
+              </ion-col>
+              <ion-col>
+                Stato:
+                <ion-icon style="color: green" class="iconStatus" name="checkmark-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+            <ion-row align-items-center="">
+              <ion-col></ion-col>
+              <ion-col >
+                <button block ion-button small round> SHOW </button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+
+    <!--Verniciatura Seconda mano-->
+    <ion-item  *ngIf="list==1 || list==0" #machine (click)="readChart('vSecondaMano')">
+      <ion-card class="card">
+        <ion-card-header>
+          <ion-icon name='ios-brush' item-start ></ion-icon>
+          Verniciatura 2° mano
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                Loc: Edificio V
+              </ion-col>
+              <ion-col>
+                Data Insatallazione: 20/10/2017
+              </ion-col>
+              <ion-col>
+                Stato:
+                <ion-icon style="color: green" class="iconStatus" name="checkmark-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col></ion-col>
+              <ion-col >
+                <button block ion-button small round> SHOW </button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+
+    <!--Forno Riscaldamento-->
+    <ion-item  *ngIf="list==2 || list==0" #machine (click)="readChart('FornoRiscaldamento')">
+      <ion-card class="card">
+        <ion-card-header>
+          <ion-icon name='ios-thermometer-outline' item-start></ion-icon>
+          Forno Riscaldamento
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                Loc: Edificio F
+              </ion-col>
+              <ion-col>
+                Data Insatallazione: 20/12/2009
+              </ion-col>
+              <ion-col>
+                Stato:
+                <ion-icon style="color: green" class="iconStatus" name="checkmark-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col></ion-col>
+              <ion-col >
+                <button block ion-button small round> SHOW </button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+
+    <!--Forno Cottura-->
+    <ion-item  *ngIf="list==2 || list==0" #machine (click)="readChart('FornoCottura')">
+      <ion-card class="card">
+        <ion-card-header>
+          <ion-icon name='ios-thermometer-outline' item-start></ion-icon>
+          Forno Cottura
+
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                Loc: Edificio F
+              </ion-col>
+              <ion-col>
+                Data Insatallazione: 20/12/2009
+              </ion-col>
+              <ion-col>
+                Stato:
+                <ion-icon style="color: green" class="iconStatus" name="checkmark-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col></ion-col>
+              <ion-col >
+                <button block ion-button small round> SHOW </button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+
+    <!--Forno Raffredamento-->
+    <ion-item *ngIf="list==2 || list==0" #machine (click)="readChart('FornoRaffredamento')">
+      <ion-card class="card">
+        <ion-card-header>
+          <ion-icon name='ios-thermometer-outline' item-start></ion-icon>
+          Forno Raffreddamento
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                Loc: Edificio F
+              </ion-col>
+              <ion-col>
+                Data Insatallazione: 20/12/2009
+              </ion-col>
+              <ion-col>
+                Stato:
+                <ion-icon style="color: green" class="iconStatus" name="checkmark-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col></ion-col>
+              <ion-col >
+                <button block ion-button small round> SHOW </button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+
+    <!--Motore Uno-->
+    <ion-item *ngIf="list==3 || list==0" #machine (click)="readChart('motoreUno')">
+      <ion-card class="card">
+        <ion-card-header>
+          <ion-icon name='ios-speedometer' item-start ></ion-icon>
+          Motore 1
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                Loc: Edificio F
+              </ion-col>
+              <ion-col>
+                Data Insatallazione: 20/12/2009
+              </ion-col>
+              <ion-col>
+                Stato:
+                <ion-icon style="color: green" class="iconStatus" name="checkmark-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col></ion-col>
+              <ion-col >
+                <button block ion-button small round> SHOW </button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+
+    <!--Motore Due-->
+    <ion-item *ngIf="list==3 || list==0" #machine (click)="readChart('motoreDue')">
+      <ion-card class="card">
+        <ion-card-header>
+          <ion-icon name='ios-speedometer' item-start ></ion-icon>
+          Motore 2
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                Loc: Edificio F
+              </ion-col>
+              <ion-col>
+                Data Insatallazione: 20/12/2009
+              </ion-col>
+              <ion-col>
+                Stato:
+                <ion-icon style="color: green" class="iconStatus" name="checkmark-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col></ion-col>
+              <ion-col >
+                <button block ion-button small round> SHOW </button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+  <!--End macchinari-->
+
+
+</ion-content>

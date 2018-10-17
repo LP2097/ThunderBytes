@@ -19,7 +19,16 @@ import {LoginPage} from "../pages/login/login";
 import { Provider } from '../providers/provider/provider';
 import {HttpModule} from "@angular/http";
 import { HttpClientModule} from "@angular/common/http";
-
+import {SettingsPage} from "../pages/settings/settings";
+import { JustgageModule } from 'angular2-justgage';
+import { ChartsModule } from 'ng2-charts';
+import {MachinePage} from "../pages/machine/machine";
+import {GaugeModule} from "angular-gauge";
+import {SinglemachinePage} from "../pages/singlemachine/singlemachine";
+import {SplashPage} from "../pages/splash/splash";
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import {LocalNotifications} from "@ionic-native/local-notifications";
+import {TabsPage} from "../pages/tabs/tabs";
 
 
 var config = {
@@ -36,7 +45,13 @@ var config = {
     MyApp,
     HomePage,
     ListPage,
-    LoginPage
+    LoginPage,
+    SettingsPage,
+    MachinePage,
+    SinglemachinePage,
+    SplashPage,
+    TabsPage
+
 
   ],
   imports: [
@@ -47,8 +62,11 @@ var config = {
     CacheModule.forRoot(),
     AngularFireAuthModule,
     HttpModule,
-    HttpClientModule
-
+    HttpClientModule,
+    JustgageModule,
+    ChartsModule,
+    GaugeModule.forRoot(),
+    NgCircleProgressModule.forRoot({ })
 
   ],
   bootstrap: [IonicApp],
@@ -56,7 +74,12 @@ var config = {
     MyApp,
     HomePage,
     ListPage,
-    LoginPage
+    LoginPage,
+    SettingsPage,
+    MachinePage,
+    SinglemachinePage,
+    SplashPage,
+    TabsPage
 
 
   ],
@@ -66,6 +89,7 @@ var config = {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GooglePlus,
     Provider,
+    LocalNotifications
 
 
   ]

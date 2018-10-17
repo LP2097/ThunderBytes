@@ -1,16 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, App} from 'ionic-angular';
+import {Nav, Platform, ModalController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Storage } from "@ionic/storage";
-
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import {LoginPage} from "../pages/login/login";
-import {CacheService} from "ionic-cache";
-import { GooglePlus } from '@ionic-native/google-plus';
 import {Provider} from "../providers/provider/provider";
-
+import {SettingsPage} from "../pages/settings/settings";
+import {MachinePage} from "../pages/machine/machine";
+import { SplashPage } from '../pages/splash/splash';
 
 
 @Component({
@@ -21,7 +19,6 @@ export class MyApp {
 
   rootPage: any = LoginPage;
 
-  user;
 
   pages: Array<{title: string, component: any}>;
 
@@ -29,14 +26,16 @@ export class MyApp {
               public statusBar: StatusBar,
               public splashScreen: SplashScreen,
               private provider: Provider,
+              private modalCtrl: ModalController
               ) {
     this.initializeApp();
-    this.user=provider.displayName;
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'List', component: ListPage },
+      { title: 'Machine', component: MachinePage },
+      { title: 'Settings', component: SettingsPage}
     ];
 
   }
@@ -45,8 +44,12 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
+
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+
+      let splash = this.modalCtrl.create(SplashPage);
+      splash.present();
     });
 
 
