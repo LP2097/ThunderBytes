@@ -1,31 +1,34 @@
 <ion-header>
   <ion-navbar>
     <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
+      <ion-icon name="menu" class="styleIcon"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title class="title">Dashboard</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col col-4 ></ion-col>
-      <ion-col col-8 align-self-center>
+<ion-content class="contentHome">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingText="Pull to refresh"
+      pullingIcoin="arrow-dropdown"
+      refreshingSpinner="circles"
+      refreshingText="..fetching">
 
-          <img class="circle-pic"  [src]="photo">
+    </ion-refresher-content>
+  </ion-refresher>
 
-      </ion-col>
-      <ion-col col-2></ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-4></ion-col>
-      <ion-col col-8 align-self-center>
-        <div *ngIf="user">
-          {{user}}
-        </div>
-      </ion-col>
-      <ion-col col-2></ion-col>
-    </ion-row>
-  </ion-grid>
+  <!--Prima riga con il consumo globale dell'intero impianto-->
+  <div id="consumationPlant">
+    <p id="textConsumationPlant">Consumo intero impianto: <b class="consumo">{{this.correnteImpianto.toFixed(3)}}</b> Kwh</p>
+  </div>
+
+  <!--Primo grafico, nel quale viene riportato il consumo del singolo macchinario. Cliccabile.-->
+  <div class="legend4"></div>
+  <div id="pieChart" class="chart-container"></div>
+
+  <!--Seccondo grafico, nel quale viene riportato il consumo del singolo senore del macchinario selezionato-->
+  <div id="chart" class="chart-container"></div>
+
 </ion-content>
+

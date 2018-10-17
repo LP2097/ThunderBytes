@@ -1,22 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {GooglePlus} from "@ionic-native/google-plus";
-import {NavController} from "ionic-angular";
-import {HomePage} from "../../pages/home/home";
+import {AlertController} from "ionic-angular";
 
-/*
-  Generated class for the Provider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class Provider {
 
-  constructor(public http: HttpClient, private googlePlus: GooglePlus) {
+  constructor(public http: HttpClient, private googlePlus: GooglePlus, private alertCtrl: AlertController) {
     console.log('Hello Provider Provider');
   }
 
+  user;
   displayName=null;
   email=null;
   familyName=null;
@@ -24,11 +18,14 @@ export class Provider {
   givenName=null;
   imageUrl=null;
   isLoggedIn=null;
+  autentication;
+
 
   async login(): Promise<any> {
     await this.googlePlus.login({})
       .then(res => {
         console.log('dopo'+res);
+        this.user=res;
         this.displayName = res.displayName;
         this.email = res.email;
         this.familyName = res.familyName;
@@ -39,8 +36,26 @@ export class Provider {
         this.isLoggedIn = true;
         return res;
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+          this.errorLogin();
+          this.isLoggedIn=false;
+        }
+      );
   }
+
+  errorLogin() {
+    let alert = this.alertCtrl.create({
+      title: 'Errore',
+      message: 'Email o Password errati ',
+      buttons: [
+        {
+          text: 'Ok',
+        }
+      ]
+    });
+    alert.present();
+  }
+
 
 
   logout() {
@@ -53,7 +68,7 @@ export class Provider {
         this.givenName = "";
         this.userId = "";
         this.imageUrl = "";
-
+        this.user="";
         this.isLoggedIn = false;
       })
       .catch(err => console.error(err));
