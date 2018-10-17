@@ -51,13 +51,13 @@
             Email:
           </ion-col >
           <ion-col>
-            {{user.email }}
+            {{user.email}}
           </ion-col>
         </ion-row>
         <ion-row class="logout">
           <ion-col></ion-col>
           <ion-col>
-            <button ion-button color="danger" round>
+            <button ion-button color="danger" (click)="logout()" round>
               LOGOUT <i class="fa fa-sign-out buttonLogout" aria-hidden="true"></i>
             </button>
           </ion-col>

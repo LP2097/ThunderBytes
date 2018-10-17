@@ -70,11 +70,14 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      },
       "cordova-plugin-ionic-keyboard": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.890055678350-nho29ukdg1af4og2ju8gjmd2v7ahb28g"
+        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.890055678350-nho29ukdg1af4og2ju8gjmd2v7ahb28g",
+        "PLAY_SERVICES_VERSION": "11.8.0"
       },
       "cordova-plugin-local-notification": {}
     },

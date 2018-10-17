@@ -12,6 +12,8 @@ import {influxData} from "../../app/models/InfluxData";
 })
 export class SinglemachinePage {
 
+  ip="192.168.1.121";
+
   listSensors:Array<string> = [];
   firstSensor: string;
   list: string;
@@ -415,7 +417,7 @@ export class SinglemachinePage {
   }
 
   getMachine(machine){
-     this.http.get<influxData[]>("http://192.168.1.125:5000/" + this.apiMachine) //equivalente del metodo get di ajax
+     this.http.get<influxData[]>("http://"+this.ip+":5000/" + this.apiMachine) //equivalente del metodo get di ajax
        .timeout(3000)
        .subscribe(data =>{
           if(machine == "Forno riscaldamento"){

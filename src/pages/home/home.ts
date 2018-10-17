@@ -16,7 +16,7 @@ var boolCreateGraphsS = false;
 // --------------------------- End variabili grafico sensori ---------------------------
 
 var z = 0;                  // variabile per calcolare la corrente dell'intero impianto
-var ip = "192.168.1.125";
+var ip = "192.168.1.121";
 
 @Component({
   selector: 'page-home',

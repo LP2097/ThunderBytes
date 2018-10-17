@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {Provider} from "../../providers/provider/provider";
 import {UserInfo} from "../../app/models/UserInfo";
 import {LoginPage} from "../login/login";
-
+import {App} from 'ionic-angular';
 /**
  * Generated class for the SettingsPage page.
  *
@@ -21,6 +21,7 @@ export class SettingsPage {
   autentication;
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              private app:App,
               private provider: Provider) {
     console.log("mail"+this.provider.email);
 
@@ -40,13 +41,14 @@ export class SettingsPage {
   getUserInfo(){
     let autentication= this.provider.autentication;
     console.log("autenticazione: "+autentication );
-    if(autentication=='google')
+    if(autentication=='google'){
       this.user = this.provider.user;
+    console.log(this.user)}
     else{
       this.user.givenName="Guest";
       this.user.imageUrl="../../assets/imgs/guest.png";
       this.user.familyName="-";
-      console.log(this.provider.user.email)
+      console.log(this.provider.user.email);
       this.user.email=this.provider.email;
 
     }
@@ -55,6 +57,6 @@ export class SettingsPage {
 
   logout() {
     this.provider.logout();
-    this.navCtrl.setRoot(LoginPage);
+    this.app.getRootNav().setRoot(LoginPage);
   }
 }
